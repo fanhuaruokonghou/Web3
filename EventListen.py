@@ -24,8 +24,12 @@ def log_loop(event_filter, poll_interval, event_filter1):
 
 def main():
     # block_filter = web3.eth.filter({"address": "0x9321E4D79E9c05DBB130bf0B54c8E9C24D42Dc12"})
-    event_filter1 = contract_instance.events.FileInfoOk.createFilter(fromBlock='latest', argument_filters={'arg1': 10})
-    event_filter1.get_new_entries()
+    event_filter = init.contract_ip_instance1.events.IpIfOk.createFilter(
+        fromBlock='latest')
+    event_filter1 = init.contract_data_instance1.events.FileInfoOk.createFilter(
+        fromBlock='latest', argument_filters={'arg1': 10})
+    print(event_filter.get_all_entries())
+    print(event_filter1.get_all_entries())
 
 
 if __name__ == "__main__":

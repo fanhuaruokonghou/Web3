@@ -19,7 +19,6 @@ ip_contract_addr = json.load(file)
 file.close()
 
 
-
 config = {
     "abi_DataControl": data_control_abi,
     "address_DataControl": data_contract_addr,
@@ -34,3 +33,7 @@ contract_data_instance = web3.eth.contract(
     address=config['address_DataControl'], abi=config['abi_DataControl'], ContractFactoryClass=ConciseContract)
 contract_ip_instance = web3.eth.contract(
     address=config['address_IpControl'], abi=config['abi_IpControl'], ContractFactoryClass=ConciseContract)
+contract_data_instance1 = web3.eth.contract(
+    address=config['address_DataControl'], abi=config['abi_DataControl'])
+contract_ip_instance1 = web3.eth.contract(
+    address=config['address_IpControl'], abi=config['abi_IpControl'])
