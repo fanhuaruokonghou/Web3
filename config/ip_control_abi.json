@@ -1,0 +1,116 @@
+[
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x8da5cb5b"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "length",
+          "type": "uint16"
+        }
+      ],
+      "name": "IpIfOk",
+      "type": "event",
+      "signature": "0x8b42827114392ddf71989b39b1609382adfa90f1bbfeb5fb0cc425e4d9314df1"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_length",
+          "type": "uint16"
+        }
+      ],
+      "name": "SetLength",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x1aa03878"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "name": "ChangeOwner",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xf2853292"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "number",
+          "type": "uint256"
+        },
+        {
+          "name": "ip",
+          "type": "string"
+        },
+        {
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "set_ip",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x02561fee"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getIp",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]"
+        },
+        {
+          "name": "",
+          "type": "string[]"
+        },
+        {
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xd6f63339"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "set_start",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x873727ee"
+    }
+  ]
