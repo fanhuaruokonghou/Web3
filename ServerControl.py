@@ -2,8 +2,6 @@ import json
 import init
 
 
-
-
 def get_ip_list():
     ip_list = init.init.contract_ip_instance.getIp()
     data = {
