@@ -1,10 +1,11 @@
 import asyncio
 import init
 import json
+import time
 
 
 def handle_event(event):
-    print(event)
+    t = time.time()
     str_list = str(event)
     str_list1 = str_list[14:-1].replace("'args': AttributeDict({", '')
     str_list1 = str_list1.replace("})", '')
@@ -13,7 +14,10 @@ def handle_event(event):
     str_list1 = str_list1.replace("\n", '')
     str_list1 = str_list1.replace("\'", '\"')
     json_list1 = json.loads(str_list1)
-    str_list = "{" + "\"event\": \"" + str(json_list1['event'])+"\", \"length\": " + str(json_list1['length']) + "}\n"
+    str_list = \
+        "{" + "\"event\": \"" + str(json_list1['event']) +\
+        "\", \"length\": " + str(json_list1['length']) + \
+        "\", \"time\": " + str(int(round(t * 1000))) + "}\n"
     file = open('file_list.txt', mode='a', buffering=-1, encoding='utf-8')
     file.writelines(str_list)
     file.close()
