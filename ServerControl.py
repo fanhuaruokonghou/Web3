@@ -1,9 +1,10 @@
 import json
 import init
+import TerminalControl
 
 
 def get_ip_list():
-    ip_list = init.init.contract_ip_instance.getIp()
+    ip_list = init.contract_ip_instance.getIp()
     data = {
         'number': ip_list[0],
         'ip': ip_list[1],
@@ -44,16 +45,16 @@ def get_file_list():
 
 def ip_list():
     # init.contract_ip_instance.SetLength(2, transact={'from': init.owner})
-    # print(init.contract_ip_instance.set_ip(1, TerminalControl.get_host_ip(),
-    #                                   web3.toChecksumAddress(init.owner), transact={'from': init.owner}))
+    print(init.contract_ip_instance.set_ip(1, TerminalControl.get_host_ip(),
+                                           init.web3.toChecksumAddress(init.owner), transact={'from': init.owner}))
     get_ip_list()
 
 
 def data_list():
-    init.contract_data_instance.SetLength(2, transact={'from': init.owner})
-    # print(init.contract_data_instance.set_file_list(
-    #     1, 1, 1, 1, web3.toChecksumAddress(init.owner),
-    #     "1", "1", "1", 1, 1, transact={'from': init.owner}))
+    # init.contract_data_instance.SetLength(2, transact={'from': init.owner})
+    print(init.contract_data_instance.set_file_list(
+        1, 1, 1, 1, init.web3.toChecksumAddress(init.owner),
+        "1", "1", "1", 1, 1, transact={'from': init.owner}))
     # print(init.contract_data_instance.getLength())
     # r = web3.eventFilter('FileInfoOk', {'fromBlock', 1, 'toBlock', 'latest'})
     # r = init.contract_data_instance.events.FileInfoOk.createFilter(fromBlock=1)
@@ -82,4 +83,5 @@ def data_list():
 
 
 if __name__ == "__main__":
+    data_list()
     ip_list()
