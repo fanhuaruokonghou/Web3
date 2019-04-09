@@ -27,7 +27,7 @@ config = {
     "address_IpControl": ip_contract_addr
 }
 
-web3 = Web3(HTTPProvider('http://127.0.0.1:7545'))
+web3 = Web3(HTTPProvider('http://47.102.203.221:8545'))
 owner = web3.eth.accounts[0]
 contract_data_instance = web3.eth.contract(
     address=config['address_DataControl'], abi=config['abi_DataControl'], ContractFactoryClass=ConciseContract)

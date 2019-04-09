@@ -38,10 +38,23 @@ def get_file_list():
     return json_data
 
 
+def set_data_length(length):
+    init.contract_data_instance.SetLength(length, transact={'from': init.owner})
+
+
+def set_ip_length(length):
+    init.contract_ip_instance.SetLength(length, transact={'from': init.owner})
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "FileInfoOk":
         get_file_list()
     elif sys.argv[1] == "IpIfOk":
         get_ip_list()
+    elif sys.argv[1] == "data_length":
+        set_data_length(sys.argv[2])
+    elif sys.argv[1] == "ip_length":
+        set_ip_length(sys.argv[2])
     else:
         print("参数错误！！")
+    # set_data_length(2)
