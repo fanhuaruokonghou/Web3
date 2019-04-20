@@ -58,3 +58,4 @@ if __name__ == "__main__":
     else:
         print("参数错误！！")
     # set_data_length(2)
+    # set_ip_length(2)
