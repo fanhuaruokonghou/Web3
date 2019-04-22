@@ -8,7 +8,8 @@ def get_ip_list():
     data = {
         'number': ip_list[0],
         'ip': ip_list[1],
-        'user': ip_list[2]
+        'user': ip_list[2],
+        'area': ip_list[3]
     }
     init.contract_data_instance.set_start(transact={'from': init.owner})
     json_data = json.dumps(data)
@@ -52,9 +53,9 @@ if __name__ == "__main__":
     elif sys.argv[1] == "IpIfOk":
         get_ip_list()
     elif sys.argv[1] == "data_length":
-        set_data_length(sys.argv[2])
+        set_data_length(int(sys.argv[2]))
     elif sys.argv[1] == "ip_length":
-        set_ip_length(sys.argv[2])
+        set_ip_length(int(sys.argv[2]))
     else:
         print("参数错误！！")
     # set_data_length(2)

@@ -1,22 +1,20 @@
-from web3 import Web3, HTTPProvider
-from web3.contract import ConciseContract
-import socket
 import init
+from web3.auto import w3
+import json
+from crypto import HDPrivateKey, HDKey
 
-# config = {
-#     "abi_DataControl": init.data_control_abi,
-#     "address_DataControl": init.data_contract_addr,
-#
-#     "abi_IpControl": init.ip_control_abi,
-#     "address_IpControl": init.ip_contract_addr
-# }
-#
-# web3 = Web3(HTTPProvider('http://47.102.203.221:8545'))
-# owner = web3.eth.accounts[0]
-# contract_file_list = web3.eth.contract(
-#     address=config['address_DataControl'], abi=config['abi_DataControl'], ContractFactoryClass=ConciseContract)
-# contract_ip_list = web3.eth.contract(
-#     address=config['address_IpControl'], abi=config['abi_IpControl'], ContractFactoryClass=ConciseContract)
+
+def init(path, password):
+    global key_json
+    global contract
+    global nonce
+    global private_key
+    file = open(path, "r")
+    key_json = json.load(file)
+    file.close()
+    contract = w3.eth.contract(address=init.config['address_IpControl'], abi=init.config['abi_IpControl'])
+    nonce = init.web3.eth.getTransactionCount('0x578bfa5e1809217E495e1E2CaE75a5434b9636b5')
+    private_key = w3.eth.account.decrypt(key_json, password)
 
 
 def set_file_list(number, file_number, data_type, size, user, period, area, file_addr, file_hash, key):
@@ -30,40 +28,59 @@ def set_file_list(number, file_number, data_type, size, user, period, area, file
     # file_addr;  //文件索引
     # file_hash;  //文件校验Hash
     # key;  //AES256位密钥
-    transact_hash = \
-        init.contract_data_instance.set_file_list(
-            number, file_number, data_type, size, init.web3.toChecksumAddress(user), period, area,
-            file_addr, file_hash, key, transact={'from': init.web3.toChecksumAddress(user)})
-    return transact_hash
+    tx = contract.functions.set_ip(
+        number,
+        file_number,
+        data_type,
+        size,
+        w3.toChecksumAddress(user),
+        period,
+        area,
+        file_addr,
+        file_hash,
+        key
+    ).buildTransaction({
+        'chainId': 1001,
+        'gas': 700000,
+        'gasPrice': w3.toWei('2', 'gwei'),
+        'nonce': nonce,
+    })
+    tx = w3.eth.account.signTransaction(tx, private_key=private_key)
+    init.web3.eth.sendRawTransaction(tx.rawTransaction)
+    return
 
 
-def set_ip(number, user):
-    transact_hash = \
-        init.contract_ip_instance.set_ip(
-            number, get_host_ip(), init.web3.toChecksumAddress(user),
-            transact={'from': init.web3.toChecksumAddress(user)})
-    return transact_hash
-
-
-def get_host_ip():
-    # 优雅地获取本机IP
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 80))
-        ip = s.getsockname()[0]
-    finally:
-        s.close()
-    return ip
+def set_ip(number, ip, user, area):
+    tx = contract.functions.set_ip(
+        number,
+        ip,
+        init.web3.toChecksumAddress(user),
+        area
+    ).buildTransaction({
+        'chainId': 1001,
+        'gas': 700000,
+        'gasPrice': w3.toWei('2', 'gwei'),
+        'nonce': nonce,
+    })
+    tx = w3.eth.account.signTransaction(tx, private_key=private_key)
+    init.web3.eth.sendRawTransaction(tx.rawTransaction)
+    return
 
 
 if __name__ == "__main__":
-    # print(get_host_ip())
-    transact_hash_data = set_file_list(1, 1, 1, 1, 0xf77918f9bc7af8e58904d1804dc1741b1a753948, "1", "1", "1", 1, 1)
-    transaction = init.web3.eth.getTransaction(transact_hash_data)
-    print(init.contract_data_instance1.decode_function_input(transaction.input))
+    # init("‪C:/Users/w/Desktop/key.json", '123456')
+    master_key = HDPrivateKey.master_key_from_mnemonic(
+        'laundry snap patient survey sleep strategy finger bone real west arch protect', '123456')
+    root_keys = HDKey.from_path(master_key, "m/44'/60'/0'")
+    acct_priv_key = root_keys[-1]
+    for i in range(10):
+        keys = HDKey.from_path(acct_priv_key, '{change}/{index}'.format(change=0, index=i))
+        private_key = keys[-1]
+        public_key = private_key.public_key
+        print("Index %s:" % i)
+        print("  Private key (hex, compressed): " + private_key._key.to_hex())
+        print("  Address: " + private_key.public_key.address())
 
-    transact_hash_ip = set_ip(1, 0xf77918f9bc7af8e58904d1804dc1741b1a753948)
-    transaction = init.web3.eth.getTransaction(transact_hash_ip)
-    print(init.contract_ip_instance1.decode_function_input(transaction.input))
+
 
 
