@@ -168,7 +168,7 @@
         },
         {
           "name": "size",
-          "type": "uint256"
+          "type": "string"
         },
         {
           "name": "user",
@@ -188,11 +188,11 @@
         },
         {
           "name": "file_hash",
-          "type": "uint256"
+          "type": "string"
         },
         {
           "name": "key",
-          "type": "uint256"
+          "type": "string"
         }
       ],
       "name": "set_file_list",
@@ -200,7 +200,7 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function",
-      "signature": "0x0a9d74b7"
+      "signature": "0x12cff234"
     },
     {
       "constant": true,
@@ -232,7 +232,7 @@
         },
         {
           "name": "",
-          "type": "uint256[]"
+          "type": "string[]"
         }
       ],
       "payable": false,
@@ -285,11 +285,11 @@
       "outputs": [
         {
           "name": "",
-          "type": "uint256[]"
+          "type": "string[]"
         },
         {
           "name": "",
-          "type": "uint256[]"
+          "type": "string[]"
         }
       ],
       "payable": false,
