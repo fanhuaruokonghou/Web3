@@ -4,17 +4,31 @@ import json
 from crypto import HDPrivateKey, HDKey
 
 
-def init(path, password):
-    global key_json
-    global contract
-    global nonce
-    global private_key
+# 通过json文件导入私钥
+def init_json_private_key(path, password):
     file = open(path, "r")
+    global key_json
     key_json = json.load(file)
     file.close()
+    global contract
     contract = w3.eth.contract(address=init.config['address_IpControl'], abi=init.config['abi_IpControl'])
-    nonce = init.web3.eth.getTransactionCount('0x578bfa5e1809217E495e1E2CaE75a5434b9636b5')
+    global private_key
     private_key = w3.eth.account.decrypt(key_json, password)
+    global address
+    address = w3.eth.account.privateKeyToAccount(private_key).address
+
+
+# 通过助记词导入
+def init_mnemonic(mnemonic, index, password):
+    master_key = HDPrivateKey.master_key_from_mnemonic(mnemonic, password)
+    root_keys = HDKey.from_path(master_key, "m/44'/60'/0'")
+    acct_private_key = root_keys[-1]
+    keys = HDKey.from_path(acct_private_key, '{change}/{index}'.format(change=0, index=index))
+    private_key_mnemonic = keys[-1]
+    global private_key
+    private_key = private_key_mnemonic._key.to_hex()
+    global address
+    address = private_key_mnemonic.public_key.address()
 
 
 def set_file_list(number, file_number, data_type, size, user, period, area, file_addr, file_hash, key):
@@ -28,6 +42,7 @@ def set_file_list(number, file_number, data_type, size, user, period, area, file
     # file_addr;  //文件索引
     # file_hash;  //文件校验Hash
     # key;  //AES256位密钥
+    nonce = init.web3.eth.getTransactionCount(w3.toChecksumAddress(address))
     tx = contract.functions.set_ip(
         number,
         file_number,
@@ -51,6 +66,7 @@ def set_file_list(number, file_number, data_type, size, user, period, area, file
 
 
 def set_ip(number, ip, user, area):
+    nonce = init.web3.eth.getTransactionCount(w3.toChecksumAddress(address))
     tx = contract.functions.set_ip(
         number,
         ip,
@@ -68,19 +84,7 @@ def set_ip(number, ip, user, area):
 
 
 if __name__ == "__main__":
-    # init("‪C:/Users/w/Desktop/key.json", '123456')
-    master_key = HDPrivateKey.master_key_from_mnemonic(
-        'laundry snap patient survey sleep strategy finger bone real west arch protect', '123456')
-    root_keys = HDKey.from_path(master_key, "m/44'/60'/0'")
-    acct_priv_key = root_keys[-1]
-    for i in range(10):
-        keys = HDKey.from_path(acct_priv_key, '{change}/{index}'.format(change=0, index=i))
-        private_key = keys[-1]
-        public_key = private_key.public_key
-        print("Index %s:" % i)
-        print("  Private key (hex, compressed): " + private_key._key.to_hex())
-        print("  Address: " + private_key.public_key.address())
-
+    init_mnemonic('laundry snap patient survey sleep strategy finger bone real west arch protect', 0, '123456')
 
 
 

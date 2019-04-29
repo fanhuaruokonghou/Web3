@@ -1,7 +1,3 @@
-"""This submodule provides the PublicKey, PrivateKey, and Signature classes.
-It also provides HDPublicKey and HDPrivateKey classes for working with HD
-wallets."""
-import math
 import base58
 import base64
 import hashlib
@@ -9,17 +5,13 @@ import hmac
 from mnemonic.mnemonic import Mnemonic
 import random
 from two1.bitcoin.utils import bytes_to_str
-from two1.bitcoin.utils import address_to_key_hash
 from two1.bitcoin.utils import rand_bytes
-from two1.crypto.ecdsa_base import Point
 from two1.crypto.ecdsa import ECPointAffine
 from two1.crypto.ecdsa import secp256k1
+from eth_utils import encode_hex
+from Crypto.Hash import keccak
 
 bitcoin_curve = secp256k1()
-
-from eth_utils import encode_hex
-
-from Crypto.Hash import keccak
 sha3_256 = lambda x: keccak.new(digest_bits=256, data=x)
 
 
@@ -28,38 +20,36 @@ def sha3(seed):
 
 
 def get_bytes(s):
-    """Returns the byte representation of a hex- or byte-string."""
+    """返回十六进制或字节字符串的字节表示形式"""
     if isinstance(s, bytes):
         b = s
     elif isinstance(s, str):
         b = bytes.fromhex(s)
     else:
-        raise TypeError("s must be either 'bytes' or 'str'!")
+        raise TypeError("s must be 'bytes' or 'str'!")
 
     return b
 
 
 class PrivateKeyBase(object):
-    """ Base class for both PrivateKey and HDPrivateKey.
-
-    As this class is a base class it should not be used directly.
+    """  PrivateKey 和 HDPrivateKey的基础类
 
     Args:
-        k (int): The private key.
+        k (int): 私钥.
 
     Returns:
-        PrivateKey: The object representing the private key.
+        PrivateKey: 私钥对象.
     """
 
     @staticmethod
     def from_b58check(private_key):
-        """ Decodes a Base58Check encoded private-key.
+        """ 解码Base58Check编码的私钥
 
         Args:
-            private_key (str): A Base58Check encoded private key.
+            private_key (str): 经过Base58Check编码的对象.
 
         Returns:
-            PrivateKey: A PrivateKey object
+            PrivateKey: 私钥对象
         """
         raise NotImplementedError
 
@@ -69,98 +59,27 @@ class PrivateKeyBase(object):
 
     @property
     def public_key(self):
-        """ Returns the public key associated with this private key.
+        """ 返回改私钥的公钥
 
         Returns:
             PublicKey:
-                The PublicKey object that corresponds to this
-                private key.
+                与此私钥对应的PublicKey对象。
         """
         return self._public_key
 
-    def raw_sign(self, message, do_hash=True):
-        """ Signs message using this private key.
-
-        Args:
-            message (bytes): The message to be signed. If a string is
-               provided it is assumed the encoding is 'ascii' and
-               converted to bytes. If this is not the case, it is up
-               to the caller to convert the string to bytes
-               appropriately and pass in the bytes.
-            do_hash (bool): True if the message should be hashed prior
-               to signing, False if not. This should always be left as
-               True except in special situations which require doing
-               the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            ECPointAffine:
-                a raw point (r = pt.x, s = pt.y) which is
-                the signature.
-        """
-        raise NotImplementedError
-
-    def sign(self, message, do_hash=True):
-        """ Signs message using this private key.
-
-        Note:
-            This differs from `raw_sign()` since it returns a
-            Signature object.
-
-        Args:
-            message (bytes or str): The message to be signed. If a
-               string is provided it is assumed the encoding is
-               'ascii' and converted to bytes. If this is not the
-               case, it is up to the caller to convert the string to
-               bytes appropriately and pass in the bytes.
-            do_hash (bool): True if the message should be hashed prior
-               to signing, False if not. This should always be left as
-               True except in special situations which require doing
-               the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            Signature: The signature corresponding to message.
-        """
-        raise NotImplementedError
-
-    def sign_bitcoin(self, message, compressed=False):
-        """ Signs a message using this private key such that it
-        is compatible with bitcoind, bx, and other Bitcoin
-        clients/nodes/utilities.
-
-        Note:
-            0x18 + b\"Bitcoin Signed Message:" + newline + len(message) is
-            prepended to the message before signing.
-
-        Args:
-            message (bytes or str): Message to be signed.
-            compressed (bool): True if the corresponding public key will be
-              used in compressed format. False if the uncompressed version
-              is used.
-
-        Returns:
-            bytes: A Base64-encoded byte string of the signed message.
-            The first byte of the encoded message contains information
-            about how to recover the public key. In bitcoind parlance,
-            this is the magic number containing the recovery ID and
-            whether or not the key was compressed or not. (This function
-            always processes full, uncompressed public-keys, so the magic
-            number will always be either 27 or 28).
-        """
-        raise NotImplementedError
-
     def to_b58check(self, testnet=False):
-        """ Generates a Base58Check encoding of this private key.
+        """ 生成此私钥的Base58Check编码.
 
         Returns:
-            str: A Base58Check encoded string representing the key.
+            str: 表示密钥的Base58Check编码字符串。
         """
         raise NotImplementedError
 
     def to_hex(self):
-        """ Generates a hex encoding of the serialized key.
+        """ 生成序列化密钥的十六进制编码。
 
         Returns:
-           str: A hex encoded string representing the key.
+           str: 表示密钥的十六进制编码字符串。
         """
         return bytes_to_str(bytes(self))
 
@@ -172,41 +91,38 @@ class PrivateKeyBase(object):
 
 
 class PublicKeyBase(object):
-    """ Base class for both PublicKey and HDPublicKey.
-
-    As this class is a base class it should not be used directly.
+    """ PublicKey and HDPublicKey的基类。
 
     Args:
-        x (int): The x component of the public key point.
-        y (int): The y component of the public key point.
+        x (int): x坐标.
+        y (int): y坐标.
 
     Returns:
-        PublicKey: The object representing the public key.
+        PublicKey: 表示公钥的对象。
 
     """
 
     @staticmethod
     def from_bytes(key_bytes):
-        """ Generates a public key object from a byte (or hex) string.
+        """ 从字节（或十六进制）字符串生成公钥对象。
 
         Args:
-            key_bytes (bytes or str): A byte stream.
+            key_bytes (bytes or str): 一个字节流。
 
         Returns:
-            PublicKey: A PublicKey object.
+            PublicKey: 公钥对象.
         """
         raise NotImplementedError
 
     @staticmethod
     def from_private_key(private_key):
-        """ Generates a public key object from a PrivateKey object.
+        """ 根据私钥对象生成公钥对象.
 
         Args:
-            private_key (PrivateKey): The private key object from
-               which to derive this object.
+            private_key (PrivateKey): 私钥对象
 
         Returns:
-            PublicKey: A PublicKey object.
+            PublicKey: 公钥对象.
         """
         return private_key.public_key
 
@@ -214,54 +130,32 @@ class PublicKeyBase(object):
         pass
 
     def hash160(self, compressed=True):
-        """ Return the RIPEMD-160 hash of the SHA-256 hash of the
-        public key.
+        """ 返回公钥的SHA-256哈希的RIPEMD-160哈希。
 
         Args:
-            compressed (bool): Whether or not the compressed key should
-               be used.
+            compressed (bool): 是否应使用压缩密钥。
         Returns:
-            bytes: RIPEMD-160 byte string.
+            bytes: RIPEMD-160字节字符串。
         """
         raise NotImplementedError
 
     def address(self, compressed=True, testnet=False):
-        """ Address property that returns the Base58Check
-        encoded version of the HASH160.
+        """ 返回HASH160的Base58Check编码版本的Address属性。
 
         Args:
-            compressed (bool): Whether or not the compressed key should
-               be used.
-            testnet (bool): Whether or not the key is intended for testnet
-               usage. False indicates mainnet usage.
+            compressed (bool): 是否压缩公钥.
+            testnet (bool): 密钥是否用于测试网络。 False表示主网使用情况.
 
         Returns:
-            bytes: Base58Check encoded string
-        """
-        raise NotImplementedError
-
-    def verify(self, message, signature, do_hash=True):
-        """ Verifies that message was appropriately signed.
-
-        Args:
-            message (bytes): The message to be verified.
-            signature (Signature): A signature object.
-            do_hash (bool): True if the message should be hashed prior
-              to signing, False if not. This should always be left as
-              True except in special situations which require doing
-              the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            verified (bool): True if the signature is verified, False
-            otherwise.
+            bytes: Base58Check编码的字符串
         """
         raise NotImplementedError
 
     def to_hex(self):
-        """ Hex representation of the serialized byte stream.
+        """ 序列化字节流的十六进制表示。
 
         Returns:
-            h (str): A hex-encoded string.
+            h (str): 十六进制字符串.
         """
         return bytes_to_str(bytes(self))
 
@@ -273,41 +167,38 @@ class PublicKeyBase(object):
 
     @property
     def compressed_bytes(self):
-        """ Byte string corresponding to a compressed representation
-        of this public key.
+        """ 字节串对应于该公钥的压缩表示。
 
         Returns:
-            b (bytes): A 33-byte long byte string.
+            b (bytes): 33字节的字符串.
         """
         raise NotImplementedError
 
 
 class PrivateKey(PrivateKeyBase):
-    """ Encapsulation of a Bitcoin ECDSA private key.
+    """ 封装比特币ECDSA私钥。
 
-    This class provides capability to generate private keys,
-    obtain the corresponding public key, sign messages and
-    serialize/deserialize into a variety of formats.
+    该类提供生成私钥的功能，
+    获取相应的公钥和序列化/反序列化为各种格式。
 
     Args:
-        k (int): The private key.
+        k (int): 私钥.
 
     Returns:
-        PrivateKey: The object representing the private key.
+        PrivateKey: 表示私钥的对象.
     """
     TESTNET_VERSION = 0xEF
     MAINNET_VERSION = 0x80
 
     @staticmethod
     def from_bytes(b):
-        """ Generates PrivateKey from the underlying bytes.
+        """ 从底层字节生成PrivateKey.
 
         Args:
-            b (bytes): A byte stream containing a 256-bit (32-byte) integer.
+            b (bytes): 包含256位（32字节）整数的字节流.
 
         Returns:
-            tuple(PrivateKey, bytes): A PrivateKey object and the remainder
-            of the bytes.
+            tuple(PrivateKey, bytes): PrivateKey对象和其余字节。
         """
         if len(b) < 32:
             raise ValueError('b must contain at least 32 bytes')
@@ -316,38 +207,37 @@ class PrivateKey(PrivateKeyBase):
 
     @staticmethod
     def from_hex(h):
-        """ Generates PrivateKey from a hex-encoded string.
+        """ 从十六进制编码的字符串生成PrivateKey。
 
         Args:
-            h (str): A hex-encoded string containing a 256-bit
-                 (32-byte) integer.
+            h (str): 包含256位（32字节）整数的十六进制编码字符串。
 
         Returns:
-            PrivateKey: A PrivateKey object.
+            PrivateKey: 私钥对象.
         """
         return PrivateKey.from_bytes(bytes.fromhex(h))
 
     @staticmethod
     def from_int(i):
-        """ Initializes a private key from an integer.
+        """ 从整数初始化私钥.
 
         Args:
-            i (int): Integer that is the private key.
+            i (int): 作为私钥的整数。
 
         Returns:
-            PrivateKey: The object representing the private key.
+            PrivateKey: 表示私钥的对象。
         """
         return PrivateKey(i)
 
     @staticmethod
     def from_b58check(private_key):
-        """ Decodes a Base58Check encoded private-key.
+        """ 解码Base58Check编码的私钥.
 
         Args:
-            private_key (str): A Base58Check encoded private key.
+            private_key (str):Base58Check编码的私钥.
 
         Returns:
-            PrivateKey: A PrivateKey object
+            PrivateKey: 私钥对象
         """
         b58dec = base58.b58decode_check(private_key)
         version = b58dec[0]
@@ -358,10 +248,10 @@ class PrivateKey(PrivateKeyBase):
 
     @staticmethod
     def from_random():
-        """ Initializes a private key from a random integer.
+        """ 从随机整数初始化私钥。
 
         Returns:
-            PrivateKey: The object representing the private key.
+            PrivateKey: 表示私钥的对象。
         """
         return PrivateKey(random.SystemRandom().randrange(1, bitcoin_curve.n))
 
@@ -371,125 +261,22 @@ class PrivateKey(PrivateKeyBase):
 
     @property
     def public_key(self):
-        """ Returns the public key associated with this private key.
+        """ 返回与此私钥关联的公钥。
 
         Returns:
             PublicKey:
-                The PublicKey object that corresponds to this
-                private key.
+                与此私钥对应的PublicKey对象。
         """
         if self._public_key is None:
             self._public_key = PublicKey.from_point(
                 bitcoin_curve.public_key(self.key))
         return self._public_key
 
-    def raw_sign(self, message, do_hash=True):
-        """ Signs message using this private key.
-
-        Args:
-            message (bytes): The message to be signed. If a string is
-                provided it is assumed the encoding is 'ascii' and
-                converted to bytes. If this is not the case, it is up
-                to the caller to convert the string to bytes
-                appropriately and pass in the bytes.
-            do_hash (bool): True if the message should be hashed prior
-                to signing, False if not. This should always be left as
-                True except in special situations which require doing
-                the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            ECPointAffine:
-                a raw point (r = pt.x, s = pt.y) which is
-                the signature.
-        """
-        if isinstance(message, str):
-            msg = bytes(message, 'ascii')
-        elif isinstance(message, bytes):
-            msg = message
-        else:
-            raise TypeError("message must be either str or bytes!")
-
-        sig_pt, rec_id = bitcoin_curve.sign(msg, self.key, do_hash)
-
-        # Take care of large s:
-        # Bitcoin deals with large s, by subtracting
-        # s from the curve order. See:
-        # https://bitcointalk.org/index.php?topic=285142.30;wap2
-        if sig_pt.y >= (bitcoin_curve.n // 2):
-            sig_pt = Point(sig_pt.x, bitcoin_curve.n - sig_pt.y)
-            rec_id ^= 0x1
-
-        return (sig_pt, rec_id)
-
-    def sign(self, message, do_hash=True):
-        """ Signs message using this private key.
-
-        Note:
-            This differs from `raw_sign()` since it returns a Signature object.
-
-        Args:
-            message (bytes or str): The message to be signed. If a
-                string is provided it is assumed the encoding is
-                'ascii' and converted to bytes. If this is not the
-                case, it is up to the caller to convert the string to
-                bytes appropriately and pass in the bytes.
-            do_hash (bool): True if the message should be hashed prior
-                to signing, False if not. This should always be left as
-                True except in special situations which require doing
-                the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            Signature: The signature corresponding to message.
-        """
-        # Some BTC things want to have the recovery id to extract the public
-        # key, so we should figure that out.
-        sig_pt, rec_id = self.raw_sign(message, do_hash)
-
-        return Signature(sig_pt.x, sig_pt.y, rec_id)
-
-    def sign_bitcoin(self, message, compressed=False):
-        """ Signs a message using this private key such that it
-        is compatible with bitcoind, bx, and other Bitcoin
-        clients/nodes/utilities.
-
-        Note:
-            0x18 + b\"Bitcoin Signed Message:" + newline + len(message) is
-            prepended to the message before signing.
-
-        Args:
-            message (bytes or str): Message to be signed.
-            compressed (bool): True if the corresponding public key will be
-              used in compressed format. False if the uncompressed version
-              is used.
-
-        Returns:
-            bytes: A Base64-encoded byte string of the signed message.
-            The first byte of the encoded message contains information
-            about how to recover the public key. In bitcoind parlance,
-            this is the magic number containing the recovery ID and
-            whether or not the key was compressed or not.
-        """
-        if isinstance(message, str):
-            msg_in = bytes(message, 'ascii')
-        elif isinstance(message, bytes):
-            msg_in = message
-        else:
-            raise TypeError("message must be either str or bytes!")
-
-        msg = b"\x18Bitcoin Signed Message:\n" + bytes([len(msg_in)]) + msg_in
-        msg_hash = hashlib.sha256(msg).digest()
-
-        sig = self.sign(msg_hash)
-        comp_adder = 4 if compressed else 0
-        magic = 27 + sig.recovery_id + comp_adder
-
-        return base64.b64encode(bytes([magic]) + bytes(sig))
-
     def to_b58check(self, testnet=False):
-        """ Generates a Base58Check encoding of this private key.
+        """生成此私钥的Base58Check编码。
 
         Returns:
-            str: A Base58Check encoded string representing the key.
+            str: 表示密钥的Base58Check编码字符串。
         """
         version = self.TESTNET_VERSION if testnet else self.MAINNET_VERSION
         return base58.b58encode_check(bytes([version]) + bytes(self))
@@ -502,17 +289,16 @@ class PrivateKey(PrivateKeyBase):
 
 
 class PublicKey(PublicKeyBase):
-    """ Encapsulation of a Bitcoin ECDSA public key.
+    """ 封装比特币ECDSA公钥。
 
-    This class provides a high-level API to using an ECDSA public
-    key, specifically for Bitcoin (secp256k1) purposes.
+    此类为使用ECDSA公钥提供了高级API，特别是用于比特币（secp256k1）。
 
     Args:
-        x (int): The x component of the public key point.
-        y (int): The y component of the public key point.
+        x (int): x坐标.
+        y (int): y坐标.
 
     Returns:
-        PublicKey: The object representing the public key.
+        PublicKey: 表示公钥的对象.
     """
 
     TESTNET_VERSION = 0x6F
@@ -520,70 +306,64 @@ class PublicKey(PublicKeyBase):
 
     @staticmethod
     def from_point(p):
-        """ Generates a public key object from any object
-        containing x, y coordinates.
+        """ 从包含x，y坐标的任何对象生成公钥对象。
 
         Args:
-            p (Point): An object containing a two-dimensional, affine
-               representation of a point on the secp256k1 curve.
+            p (Point):一个对象，包含secp256k1曲线上某点的二维仿射表示。
 
         Returns:
-            PublicKey: A PublicKey object.
+            PublicKey: 公钥对象.
         """
         return PublicKey(p.x, p.y)
 
     @staticmethod
     def from_int(i):
-        """ Generates a public key object from an integer.
+        """ 从整数生成公钥对象。
 
         Note:
-            This assumes that the upper 32 bytes of the integer
-            are the x component of the public key point and the
-            lower 32 bytes are the y component.
+            这假设整数的高32字节是公钥点的x分量，低32字节是y分量。
 
         Args:
-            i (Bignum): A 512-bit integer representing the public
-               key point on the secp256k1 curve.
+            i (Bignum): 一个512位整数，表示secp256k1曲线上的公钥点.
 
         Returns:
-            PublicKey: A PublicKey object.
+            PublicKey: 公钥对象.
         """
         point = ECPointAffine.from_int(bitcoin_curve, i)
         return PublicKey.from_point(point)
 
     @staticmethod
     def from_base64(b64str, testnet=False):
-        """ Generates a public key object from a Base64 encoded string.
+        """ 从Base64编码的字符串生成公钥对象.
 
         Args:
-            b64str (str): A Base64-encoded string.
-            testnet (bool) (Optional): If True, changes the version that
-               is prepended to the key.
+            b64str (str): Base64编码的字符串.
+            testnet (bool) (Optional): 如果为True，则更改密钥前面的版本。
 
         Returns:
-            PublicKey: A PublicKey object.
+            PublicKey: 公钥对象.
         """
         return PublicKey.from_bytes(base64.b64decode(b64str))
 
     @staticmethod
     def from_bytes(key_bytes):
-        """ Generates a public key object from a byte (or hex) string.
+        """ 从字节（或十六进制）字符串生成公钥对象。
 
-        The byte stream must be of the SEC variety
-        (http://www.secg.org/): beginning with a single byte telling
-        what key representation follows. A full, uncompressed key
-        is represented by: 0x04 followed by 64 bytes containing
-        the x and y components of the point. For compressed keys
-        with an even y component, 0x02 is followed by 32 bytes
-        containing the x component. For compressed keys with an
-        odd y component, 0x03 is followed by 32 bytes containing
-        the x component.
+        字节流必须是SEC种类
+        （http://www.secg.org/）：从单个字节开始讲述
+        什么关键表示如下。 完整的，未压缩的密钥
+        表示为：0x04后跟64个字节
+        点的x和y分量。 对于压缩密钥
+        对于偶数y分量，0x02后跟32个字节
+        包含x组件。 对于带有压缩的密钥
+        奇数y分量，0x03后跟32个字节
+        x组件。
 
         Args:
-            key_bytes (bytes or str): A byte stream that conforms to the above.
+            key_bytes (bytes or str): 符合上述内容的字节流.
 
         Returns:
-            PublicKey: A PublicKey object.
+            PublicKey: 公钥对象.
         """
         b = get_bytes(key_bytes)
         key_bytes_len = len(b)
@@ -603,7 +383,7 @@ class PublicKey(PublicKeyBase):
             x = int.from_bytes(b[1:33], 'big')
             ys = bitcoin_curve.y_from_x(x)
 
-            # Pick the one that corresponds to key_type
+            # 选择与key_type对应的那个
             last_bit = key_type - 0x2
             for y in ys:
                 if y & 0x1 == last_bit:
@@ -615,81 +395,18 @@ class PublicKey(PublicKeyBase):
 
     @staticmethod
     def from_hex(h):
-        """ Generates a public key object from a hex-encoded string.
+        """ 从十六进制编码的字符串生成公钥对象。
 
-        See from_bytes() for requirements of the hex string.
+        有关十六进制字符串的要求，请参见from_bytes（）。
 
         Args:
-            h (str): A hex-encoded string.
+            h (str): 十六进制字符串
 
         Returns:
-            PublicKey: A PublicKey object.
+            PublicKey: 公钥对象.
         """
         return PublicKey.from_bytes(h)
 
-    @staticmethod
-    def from_signature(message, signature):
-        """ Attempts to create PublicKey object by deriving it
-        from the message and signature.
-
-        Args:
-            message (bytes): The message to be verified.
-            signature (Signature): The signature for message.
-               The recovery_id must not be None!
-
-        Returns:
-            PublicKey:
-                A PublicKey object derived from the
-                signature, it it exists. None otherwise.
-        """
-        if signature.recovery_id is None:
-            raise ValueError("The signature must have a recovery_id.")
-
-        msg = get_bytes(message)
-        pub_keys = bitcoin_curve.recover_public_key(msg,
-                                                    signature,
-                                                    signature.recovery_id)
-
-        for k, recid in pub_keys:
-            if signature.recovery_id is not None and recid == signature.recovery_id:
-                return PublicKey(k.x, k.y)
-
-        return None
-
-    @staticmethod
-    def verify_bitcoin(message, signature, address):
-        """ Verifies a message signed using PrivateKey.sign_bitcoin()
-        or any of the bitcoin utils (e.g. bitcoin-cli, bx, etc.)
-
-        Args:
-            message(bytes): The message that the signature corresponds to.
-            signature (bytes or str): A Base64 encoded signature
-            address (str): Base58Check encoded address.
-
-        Returns:
-            bool: True if the signature verified properly, False otherwise.
-        """
-        magic_sig = base64.b64decode(signature)
-
-        magic = magic_sig[0]
-        sig = Signature.from_bytes(magic_sig[1:])
-        sig.recovery_id = (magic - 27) & 0x3
-        compressed = ((magic - 27) & 0x4) != 0
-
-        # Build the message that was signed
-        msg = b"\x18Bitcoin Signed Message:\n" + bytes([len(message)]) + message
-        msg_hash = hashlib.sha256(msg).digest()
-
-        derived_public_key = PublicKey.from_signature(msg_hash, sig)
-        if derived_public_key is None:
-            raise ValueError("Could not recover public key from the provided signature.")
-
-        ver, h160 = address_to_key_hash(address)
-        hash160 = derived_public_key.hash160(compressed)
-        if hash160 != h160:
-            return False
-
-        return derived_public_key.verify(msg_hash, sig)
 
     def __init__(self, x, y):
         p = ECPointAffine(bitcoin_curve, x, y)
@@ -710,53 +427,31 @@ class PublicKey(PublicKeyBase):
         self.keccak = sha3(bytes(self)[1:])
 
     def hash160(self, compressed=True):
-        """ Return the RIPEMD-160 hash of the SHA-256 hash of the
-        public key.
+        """ 返回公钥的SHA-256哈希的RIPEMD-160哈希。
 
         Args:
-            compressed (bool): Whether or not the compressed key should
-               be used.
+            compressed (bool): 是否应该压缩密钥使用。
         Returns:
-            bytes: RIPEMD-160 byte string.
+            bytes: RIPEMD-160字节字符串.
         """
         return self.ripe_compressed if compressed else self.ripe
 
     def address(self, compressed=True):
-        """ Address property that returns the Base58Check
-        encoded version of the HASH160.
+        """ 返回HASH160的Base58Check编码版本的Address属性。
 
         Args:
-            compressed (bool): Whether or not the compressed key should
-               be used.
+            compressed (bool): 是否应使用压缩密钥。
 
         Returns:
-            bytes: Base58Check encoded string
+            bytes: Base58Check编码的字符串
         """
         return encode_hex(self.keccak[12:])
 
-    def verify(self, message, signature, do_hash=True):
-        """ Verifies that message was appropriately signed.
-
-        Args:
-            message (bytes): The message to be verified.
-            signature (Signature): A signature object.
-            do_hash (bool): True if the message should be hashed prior
-              to signing, False if not. This should always be left as
-              True except in special situations which require doing
-              the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            verified (bool): True if the signature is verified, False
-            otherwise.
-        """
-        msg = get_bytes(message)
-        return bitcoin_curve.verify(msg, signature, self.point, do_hash)
-
     def to_base64(self):
-        """ Hex representation of the serialized byte stream.
+        """ 序列化字节流的十六进制表示。
 
         Returns:
-            b (str): A Base64-encoded string.
+            b (str): Base64编码的字符串.
         """
         return base64.b64encode(bytes(self))
 
@@ -773,234 +468,19 @@ class PublicKey(PublicKeyBase):
         of this public key.
 
         Returns:
-            b (bytes): A 33-byte long byte string.
+            b (bytes): 一个33字节长的字节字符串。
         """
         return self.point.compressed_bytes
-
-
-class Signature(object):
-    """ Encapsulation of a ECDSA signature for Bitcoin purposes.
-
-    Args:
-        r (Bignum): r component of the signature.
-        s (Bignum): s component of the signature.
-        recovery_id (int) (Optional): Must be between 0 and 3 specifying
-           which of the public keys generated by the algorithm specified
-           in http://www.secg.org/sec1-v2.pdf Section 4.1.6 (Public Key
-           Recovery Operation) is the correct one for this signature.
-
-    Returns:
-        sig (Signature): A Signature object.
-    """
-
-    @staticmethod
-    def from_der(der):
-        """ Decodes a Signature that was DER-encoded.
-
-        Args:
-            der (bytes or str): The DER encoding to be decoded.
-
-        Returns:
-            Signature: The deserialized signature.
-        """
-        d = get_bytes(der)
-        # d must conform to (from btcd):
-        # [0 ] 0x30      - ASN.1 identifier for sequence
-        # [1 ] <1-byte>  - total remaining length
-        # [2 ] 0x02      - ASN.1 identifier to specify an integer follows
-        # [3 ] <1-byte>  - length of R
-        # [4.] <bytes>   - R
-        # [..] 0x02      - ASN.1 identifier to specify an integer follows
-        # [..] <1-byte>  - length of S
-        # [..] <bytes>   - S
-
-        # 6 bytes + R (min. 1 byte) + S (min. 1 byte)
-        if len(d) < 8:
-            raise ValueError("DER signature string is too short.")
-        # 6 bytes + R (max. 33 bytes) + S (max. 33 bytes)
-        if len(d) > 72:
-            raise ValueError("DER signature string is too long.")
-        if d[0] != 0x30:
-            raise ValueError("DER signature does not start with 0x30.")
-        if d[1] != len(d[2:]):
-            raise ValueError("DER signature length incorrect.")
-
-        total_length = d[1]
-
-        if d[2] != 0x02:
-            raise ValueError("DER signature no 1st int marker.")
-        if d[3] <= 0 or d[3] > (total_length - 7):
-            raise ValueError("DER signature incorrect R length.")
-
-        # Grab R, check for errors
-        rlen = d[3]
-        s_magic_index = 4 + rlen
-        rb = d[4:s_magic_index]
-
-        if rb[0] & 0x80 != 0:
-            raise ValueError("DER signature R is negative.")
-        if len(rb) > 1 and rb[0] == 0 and rb[1] & 0x80 != 0x80:
-            raise ValueError("DER signature R is excessively padded.")
-
-        r = int.from_bytes(rb, 'big')
-
-        # Grab S, check for errors
-        if d[s_magic_index] != 0x02:
-            raise ValueError("DER signature no 2nd int marker.")
-        slen_index = s_magic_index + 1
-        slen = d[slen_index]
-        if slen <= 0 or slen > len(d) - (slen_index + 1):
-            raise ValueError("DER signature incorrect S length.")
-
-        sb = d[slen_index + 1:]
-
-        if sb[0] & 0x80 != 0:
-            raise ValueError("DER signature S is negative.")
-        if len(sb) > 1 and sb[0] == 0 and sb[1] & 0x80 != 0x80:
-            raise ValueError("DER signature S is excessively padded.")
-
-        s = int.from_bytes(sb, 'big')
-
-        if r < 1 or r >= bitcoin_curve.n:
-            raise ValueError("DER signature R is not between 1 and N - 1.")
-        if s < 1 or s >= bitcoin_curve.n:
-            raise ValueError("DER signature S is not between 1 and N - 1.")
-
-        return Signature(r, s)
-
-    @staticmethod
-    def from_base64(b64str):
-        """ Generates a signature object from a Base64 encoded string.
-
-        Args:
-            b64str (str): A Base64-encoded string.
-
-        Returns:
-            Signature: A Signature object.
-        """
-        return Signature.from_bytes(base64.b64decode(b64str))
-
-    @staticmethod
-    def from_bytes(b):
-        """ Extracts the r and s components from a byte string.
-
-        Args:
-            b (bytes): A 64-byte long string. The first 32 bytes are
-               extracted as the r component and the second 32 bytes
-               are extracted as the s component.
-
-        Returns:
-            Signature: A Signature object.
-
-        Raises:
-            ValueError: If signature is incorrect length
-        """
-        if len(b) != 64:
-            raise ValueError("from_bytes: Signature length != 64.")
-        r = int.from_bytes(b[0:32], 'big')
-        s = int.from_bytes(b[32:64], 'big')
-        return Signature(r, s)
-
-    @staticmethod
-    def from_hex(h):
-        """ Extracts the r and s components from a hex-encoded string.
-
-        Args:
-            h (str): A 64-byte (128 character) long string. The first
-               32 bytes are extracted as the r component and the
-               second 32 bytes are extracted as the s component.
-
-        Returns:
-            Signature: A Signature object.
-        """
-        return Signature.from_bytes(bytes.fromhex(h))
-
-    def __init__(self, r, s, recovery_id=None):
-        self.r = r
-        self.s = s
-        self.recovery_id = recovery_id
-
-    @property
-    def x(self):
-        """ Convenience property for any method that requires
-            this object to provide a Point interface.
-        """
-        return self.r
-
-    @property
-    def y(self):
-        """ Convenience property for any method that requires
-            this object to provide a Point interface.
-        """
-        return self.s
-
-    def _canonicalize(self):
-        rv = []
-        for x in [self.r, self.s]:
-            # Compute minimum bytes to represent integer
-            bl = math.ceil(x.bit_length() / 8)
-            # Make sure it's at least one byte in length
-            if bl == 0:
-                bl += 1
-            x_bytes = x.to_bytes(bl, 'big')
-
-            # make sure there's no way it could be interpreted
-            # as a negative integer
-            if x_bytes[0] & 0x80:
-                x_bytes = bytes([0]) + x_bytes
-
-            rv.append(x_bytes)
-
-        return rv
-
-    def to_der(self):
-        """ Encodes this signature using DER
-
-        Returns:
-            bytes: The DER encoding of (self.r, self.s).
-        """
-        # Output should be:
-        # 0x30 <length> 0x02 <length r> r 0x02 <length s> s
-        r, s = self._canonicalize()
-
-        total_length = 6 + len(r) + len(s)
-        der = bytes([0x30, total_length - 2, 0x02, len(r)]) + r + bytes([0x02, len(s)]) + s
-        return der
-
-    def to_hex(self):
-        """ Hex representation of the serialized byte stream.
-
-        Returns:
-            str: A hex-encoded string.
-        """
-        return bytes_to_str(bytes(self))
-
-    def to_base64(self):
-        """ Hex representation of the serialized byte stream.
-
-        Returns:
-            str: A Base64-encoded string.
-        """
-        return base64.b64encode(bytes(self))
-
-    def __bytes__(self):
-        nbytes = math.ceil(bitcoin_curve.nlen / 8)
-        return self.r.to_bytes(nbytes, 'big') + self.s.to_bytes(nbytes, 'big')
-
 
 class HDKey(object):
     """ Base class for HDPrivateKey and HDPublicKey.
 
     Args:
-        key (PrivateKey or PublicKey): The underlying simple private or
-           public key that is used to sign/verify.
-        chain_code (bytes): The chain code associated with the HD key.
-        depth (int): How many levels below the master node this key is. By
-           definition, depth = 0 for the master node.
-        index (int): A value between 0 and 0xffffffff indicating the child
-           number. Values >= 0x80000000 are considered hardened children.
-        parent_fingerprint (bytes): The fingerprint of the parent node. This
-           is 0x00000000 for the master node.
+        key (PrivateKey or PublicKey): 用于签名/验证的基础简单私钥或公钥。
+        chain_code (bytes): 与HD密钥关联的链代码。
+        depth (int): 主密钥低于主节点多少级别。 根据定义，主节点的depth= 0。
+        index (int): 介于0和0xffffffff之间的值，表示子编号。 value> = 0x80000000被视为强化子项。
+        parent_fingerprint (bytes): 父节点的指纹。 这是主节点的0x00000000。
 
     Returns:
         HDKey: An HDKey object.
@@ -1125,7 +605,6 @@ class HDKey(object):
             p = path.decode('utf-8').rstrip("/").split("/")
         else:
             p = list(path)
-
         return p
 
     @staticmethod
@@ -1181,26 +660,25 @@ class HDKey(object):
 
     @property
     def identifier(self):
-        """ Returns the identifier for the key.
+        """ 返回键的标识符。
 
-        A key's identifier and fingerprint are defined as:
+        密钥的标识符和指纹定义为：
         https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#key-identifiers
 
         Returns:
-            bytes: A 20-byte RIPEMD-160 hash.
+            bytes: 一个20字节的RIPEMD-160哈希。
         """
         raise NotImplementedError
 
     @property
     def fingerprint(self):
-        """ Returns the key's fingerprint, which is the first 4 bytes
-        of its identifier.
+        """ 返回密钥的指纹，它是其标识符的前4个字节。
 
-        A key's identifier and fingerprint are defined as:
+        密钥的标识符和指纹定义为：
         https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#key-identifiers
 
         Returns:
-            bytes: The first 4 bytes of the RIPEMD-160 hash.
+            bytes: RIPEMD-160哈希的前4个字节。
         """
         return self.identifier[:4]
 
@@ -1211,7 +689,7 @@ class HDKey(object):
             testnet (bool): True if the key is to be used with
                 testnet, False otherwise.
         Returns:
-            str: A Base58Check encoded string representing the key.
+            str: A Base58Check编码的字符串 representing the key.
         """
         b = self.testnet_bytes if testnet else bytes(self)
         return base58.b58encode_check(b)
@@ -1231,39 +709,33 @@ class HDKey(object):
 
     @property
     def testnet_bytes(self):
-        """ Serialization of the key for testnet.
+        """ testnet密钥的序列化。
 
         Returns:
             bytes:
-                A 78-byte serialization of the key, specifically for
-                testnet (i.e. the first 2 bytes will be 0x0435).
+                密钥的78字节序列化，特别是对于testnet（即前2个字节将是0x0435）。
         """
         return self._serialize(True)
 
 
 class HDPrivateKey(HDKey, PrivateKeyBase):
-    """ Implements an HD Private Key according to BIP-0032:
-    https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
-
-    For the vast majority of use cases, the 3 static functions
-    (HDPrivateKey.master_key_from_entropy,
-    HDPrivateKey.master_key_from_seed and
-    HDPrivateKey.from_parent) will be used rather than directly
-    constructing an object.
+    """ 根据BIP-0032实现HD私钥：
+    https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+    对于绝大多数用例，3个静态函数
+    HDPrivateKey.master_key_from_entropy，
+    HDPrivateKey.master_key_from_seed和
+    将使用HDPrivateKey.from_parent）而不是直接使用
+    构建一个对象。
 
     Args:
-        key (PrivateKey or PublicKey): The underlying simple private or
-           public key that is used to sign/verify.
-        chain_code (bytes): The chain code associated with the HD key.
-        depth (int): How many levels below the master node this key is. By
-           definition, depth = 0 for the master node.
-        index (int): A value between 0 and 0xffffffff indicating the child
-           number. Values >= 0x80000000 are considered hardened children.
-        parent_fingerprint (bytes): The fingerprint of the parent node. This
-           is 0x00000000 for the master node.
+        key (PrivateKey or PublicKey): 用于签名/验证的基础简单私钥或公钥。
+        chain_code (bytes): 与HD密钥关联的链代码。
+        depth (int): 主密钥低于主节点多少级别。 根据定义，主节点的depth= 0。
+        index (int): 介于0和0xffffffff之间的值，表示子编号。 value> = 0x80000000被视为强化子项。
+        parent_fingerprint (bytes): 父节点的指纹。 这是主节点的0x00000000。
 
     Returns:
-        HDKey: An HDKey object.
+        HDKey: HDKey对象.
 
     """
     MAINNET_VERSION = 0x0488ADE4
@@ -1271,34 +743,29 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
     @staticmethod
     def master_key_from_mnemonic(mnemonic, passphrase=''):
-        """ Generates a master key from a mnemonic.
+        """ 从助记符生成主密钥。
 
         Args:
-            mnemonic (str): The mnemonic sentence representing
-               the seed from which to generate the master key.
-            passphrase (str): Password if one was used.
+            mnemonic (str): 表示从中生成主密钥的种子的助记句。
+            passphrase (str): 密码如果使用的话。
 
         Returns:
-            HDPrivateKey: the master private key.
+            HDPrivateKey: 主私钥。
         """
         return HDPrivateKey.master_key_from_seed(
             Mnemonic.to_seed(mnemonic, passphrase))
 
     @staticmethod
     def master_key_from_entropy(passphrase='', strength=128):
-        """ Generates a master key from system entropy.
+        """ 从系统熵生成主密钥。
 
         Args:
-            strength (int): Amount of entropy desired. This should be
-               a multiple of 32 between 128 and 256.
-            passphrase (str): An optional passphrase for the generated
-               mnemonic string.
+            strength (int): 所需的熵量。 这应该是128到256之间的32的倍数。
+            passphrase (str): 生成的助记符字符串的可选密码。
 
         Returns:
             HDPrivateKey, str:
-                a tuple consisting of the master
-                private key and a mnemonic string from which the seed
-                can be recovered.
+                一个由主私钥和一个助记符字符串组成的元组，可以从中恢复种子。
         """
         if strength % 32 != 0:
             raise ValueError("strength must be a multiple of 32")
@@ -1312,13 +779,13 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
     @staticmethod
     def master_key_from_seed(seed):
-        """ Generates a master key from a provided seed.
+        """ 从提供的种子生成主密钥。
 
         Args:
-            seed (bytes or str): a string of bytes or a hex string
+            seed (bytes or str): 一串字节或十六进制字符串
 
         Returns:
-            HDPrivateKey: the master private key.
+            HDPrivateKey: 主私钥。
         """
         S = get_bytes(seed)
         I = hmac.new(b"Bitcoin seed", S, hashlib.sha512).digest()
@@ -1331,9 +798,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
     @staticmethod
     def from_parent(parent_key, i):
-        """ Derives a child private key from a parent
-        private key. It is not possible to derive a child
-        private key from a public parent key.
+        """ 从父私钥中派生子私钥。 无法从公共父密钥派生子私钥。
 
         Args:
             parent_private_key (HDPrivateKey):
@@ -1379,12 +844,11 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
     @property
     def public_key(self):
-        """ Returns the public key associated with this private key.
+        """ 返回与此私钥关联的公钥。
 
         Returns:
             HDPublicKey:
-                The HDPublicKey object that corresponds to this
-                private key.
+                与此私钥对应的HDPublicKey对象。
         """
         if self._public_key is None:
             self._public_key = HDPublicKey(x=self._key.public_key.point.x,
@@ -1396,89 +860,17 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
         return self._public_key
 
-    def raw_sign(self, message, do_hash=True):
-        """ Signs message using the underlying non-extended private key.
-
-        Args:
-            message (bytes): The message to be signed. If a string is
-                provided it is assumed the encoding is 'ascii' and
-                converted to bytes. If this is not the case, it is up
-                to the caller to convert the string to bytes
-                appropriately and pass in the bytes.
-            do_hash (bool): True if the message should be hashed prior
-                to signing, False if not. This should always be left as
-                True except in special situations which require doing
-                the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            ECPointAffine:
-                a raw point (r = pt.x, s = pt.y) which is
-                the signature.
-        """
-        return self._key.raw_sign(message, do_hash)
-
-    def sign(self, message, do_hash=True):
-        """ Signs message using the underlying non-extended private key.
-
-        Note:
-            This differs from `raw_sign()` since it returns a Signature object.
-
-        Args:
-            message (bytes or str): The message to be signed. If a
-                string is provided it is assumed the encoding is
-                'ascii' and converted to bytes. If this is not the
-                case, it is up to the caller to convert the string to
-                bytes appropriately and pass in the bytes.
-            do_hash (bool): True if the message should be hashed prior
-                to signing, False if not. This should always be left as
-                True except in special situations which require doing
-                the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            Signature: The signature corresponding to message.
-        """
-        return self._key.sign(message, do_hash)
-
-    def sign_bitcoin(self, message, compressed=False):
-        """ Signs a message using the underlying non-extended private
-        key such that it is compatible with bitcoind, bx, and other
-        Bitcoin clients/nodes/utilities.
-
-        Note:
-            0x18 + b\"Bitcoin Signed Message:" + newline + len(message) is
-            prepended to the message before signing.
-
-        Args:
-            message (bytes or str): Message to be signed.
-            compressed (bool):
-                True if the corresponding public key will be
-                used in compressed format. False if the uncompressed version
-                is used.
-
-        Returns:
-            bytes: A Base64-encoded byte string of the signed message.
-            The first byte of the encoded message contains information
-            about how to recover the public key. In bitcoind parlance,
-            this is the magic number containing the recovery ID and
-            whether or not the key was compressed or not. (This function
-            always processes full, uncompressed public-keys, so the
-            magic number will always be either 27 or 28).
-        """
-
-        return self._key.sign_bitcoin(message, compressed)
-
     @property
     def identifier(self):
-        """ Returns the identifier for the key.
+        """ 返回键的标识符。
 
-        A key's identifier and fingerprint are defined as:
+        密钥的标识符和指纹定义为：
         https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#key-identifiers
 
-        In this case, it will return the RIPEMD-160 hash of the
-        corresponding public key.
+        在这种情况下，它将返回相应公钥的RIPEMD-160哈希值。
 
         Returns:
-            bytes: A 20-byte RIPEMD-160 hash.
+            bytes: 一个20字节的RIPEMD-160哈希。
         """
         return self.public_key.hash160()
 
@@ -1487,26 +879,22 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
 
 class HDPublicKey(HDKey, PublicKeyBase):
-    """ Implements an HD Public Key according to BIP-0032:
-    https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+    """ 根据BIP-0032实现HD公钥：
+    https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
 
-    For the vast majority of use cases, the static function
-    HDPublicKey.from_parent() will be used rather than directly
-    constructing an object.
+     对于绝大多数用例，静态函数将使用HDPublicKey.from_parent（）而不是直接使用
+     构建一个对象。
 
     Args:
-        x (int): x component of the point representing the public key.
-        y (int): y component of the point representing the public key.
-        chain_code (bytes): The chain code associated with the HD key.
-        depth (int): How many levels below the master node this key is. By
-           definition, depth = 0 for the master node.
-        index (int): A value between 0 and 0xffffffff indicating the child
-           number. Values >= 0x80000000 are considered hardened children.
-        parent_fingerprint (bytes): The fingerprint of the parent node. This
-           is 0x00000000 for the master node.
+        x (int): x 表示公钥的点的组成部分。
+        y (int): y 表示公钥的点的组成部分。
+        chain_code (bytes): 与HD密钥关联的链代码.
+        depth (int):主密钥低于主节点多少级别。 通过定义，主节点的深度= 0。
+        index (int): 介于0和0xffffffff之间的值，表示子编号。 值> = 0x80000000被视为强化子项。
+        parent_fingerprint (bytes): 父节点的指纹。 这是主节点的0x00000000。
 
     Returns:
-        HDPublicKey: An HDPublicKey object.
+        HDPublicKey: 一个HDPublicKey对象。
 
     """
 
@@ -1555,70 +943,47 @@ class HDPublicKey(HDKey, PublicKeyBase):
 
     @property
     def identifier(self):
-        """ Returns the identifier for the key.
+        """ 返回键的标识符。
 
-        A key's identifier and fingerprint are defined as:
-        https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#key-identifiers
+        密钥的标识符和指纹定义为：
+        https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#key-identifiers
 
-        In this case, it will return the RIPEMD-160 hash of the
-        non-extended public key.
+        在这种情况下，它将返回的RIPEMD-160哈希值非扩展公钥。
 
         Returns:
-            bytes: A 20-byte RIPEMD-160 hash.
+            bytes: 一个20字节的RIPEMD-160哈希。
         """
         return self.hash160()
 
     def hash160(self, compressed=True):
-        """ Return the RIPEMD-160 hash of the SHA-256 hash of the
-        non-extended public key.
+        """ 返回非扩展公钥的SHA-256哈希的RIPEMD-160哈希。
 
         Note:
-            This always returns the hash of the compressed version of
-            the public key.
+            这始终返回公钥的压缩版本的哈希值。
 
         Returns:
-            bytes: RIPEMD-160 byte string.
+            bytes: RIPEMD-160字节字符串。
         """
         return self._key.hash160(True)
 
     def address(self, compressed=True, testnet=False):
-        """ Address property that returns the Base58Check
-        encoded version of the HASH160.
+        """ 返回HASH160的Base58Check编码版本的Address属性。
 
         Args:
-            compressed (bool): Whether or not the compressed key should
+            compressed (bool): 是否应该压缩密钥
                be used.
-            testnet (bool): Whether or not the key is intended for testnet
-               usage. False indicates mainnet usage.
+            testnet (bool): 密钥是否用于测试网络。 False表示主网使用情况。
 
         Returns:
-            bytes: Base58Check encoded string
+            bytes: Base58Check编码的字符串
         """
         return self._key.address(True)
 
-    def verify(self, message, signature, do_hash=True):
-        """ Verifies that message was appropriately signed.
-
-        Args:
-            message (bytes): The message to be verified.
-            signature (Signature): A signature object.
-            do_hash (bool): True if the message should be hashed prior
-                to signing, False if not. This should always be left as
-                True except in special situations which require doing
-                the hash outside (e.g. handling Bitcoin bugs).
-
-        Returns:
-            verified (bool): True if the signature is verified, False
-            otherwise.
-        """
-        return self._key.verify(message, signature, do_hash)
-
     @property
     def compressed_bytes(self):
-        """ Byte string corresponding to a compressed representation
-        of this public key.
+        """ 字节串对应于该公钥的压缩表示。
 
         Returns:
-            b (bytes): A 33-byte long byte string.
+            b (bytes): 一个33字节长的字节字符串。
         """
         return self._key.compressed_bytes
