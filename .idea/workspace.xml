@@ -58,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ECDH.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="171" column="27" lean-forward="true" selection-start-line="171" selection-start-column="27" selection-end-line="171" selection-end-column="27" />
+            <state relative-caret-position="414">
+              <caret line="174" column="18" lean-forward="true" selection-start-line="174" selection-start-column="18" selection-end-line="174" selection-end-column="18" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -443,7 +443,7 @@
       <workItem from="1556760906663" duration="3328000" />
       <workItem from="1556938149962" duration="1368000" />
       <workItem from="1557023139972" duration="2708000" />
-      <workItem from="1557107159327" duration="14295000" />
+      <workItem from="1557107159327" duration="14588000" />
     </task>
     <task id="LOCAL-00001" summary="1.0">
       <created>1554606930858</created>
@@ -571,11 +571,18 @@
       <option name="project" value="LOCAL" />
       <updated>1557148540348</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="1.0">
+      <created>1557148638627</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1557148638627</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="319970000" />
+    <option name="totallyTimeSpent" value="320263000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -590,20 +597,20 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7656566" visible="true" weight="0.17895442" />
-      <window_info id="Structure" order="1" sideWeight="0.23434344" side_tool="true" visible="true" weight="0.17895442" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7677054" visible="true" weight="0.17895442" />
+      <window_info id="Structure" order="1" sideWeight="0.23229462" side_tool="true" visible="true" weight="0.17895442" />
       <window_info id="Favorites" order="2" sideWeight="0.50141644" side_tool="true" weight="0.18699732" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4953083" visible="true" weight="0.29886687" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4953083" weight="0.29886687" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.28611898" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49932975" weight="0.3286119" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49798927" weight="0.24220963" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49597856" weight="0.11473088" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50469166" side_tool="true" weight="0.3654391" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50402147" side_tool="true" weight="0.11473088" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.34844193" />
       <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49865952" weight="0.12181303" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -615,6 +622,32 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="1.0" />
@@ -994,8 +1027,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ECDH.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="171" column="27" lean-forward="true" selection-start-line="171" selection-start-column="27" selection-end-line="171" selection-end-column="27" />
+        <state relative-caret-position="414">
+          <caret line="174" column="18" lean-forward="true" selection-start-line="174" selection-start-column="18" selection-end-line="174" selection-end-column="18" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

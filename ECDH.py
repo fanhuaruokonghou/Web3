@@ -163,7 +163,7 @@ def generate_keys():
 
 # 获取共同秘密
 def get_secret(public_key):
-    if public_key[0:2] == '04':
+    if public_key[0:2] == '04' and len(public_key) == 130:
         private_key_owner, public_key_owner = generate_keys()
         public_key_other = (int(public_key[2:66], 16), int(public_key[66:], 16))
         secret = scalar_mult(int(private_key_owner, 16), public_key_other)
@@ -172,7 +172,7 @@ def get_secret(public_key):
             sec = "0" + sec
         return sec, '04' + hex(public_key_owner[0])[2:] + hex(public_key_owner[1])[2:]
     else:
-        return '公钥格式错误'
+        return '公钥错误'
 
 
 if __name__ == '__main__':
