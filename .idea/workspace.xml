@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47de1688-e700-4ab1-8bfd-6b3978bf83b2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ECDH.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TerminalControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/TerminalControl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TransactionControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/TerminalEventListener.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/contract.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/contract.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/contract_addr.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/contract_addr.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crypto.py" beforeDir="false" afterPath="$PROJECT_DIR$/crypto.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/str_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/str_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECDH.py" beforeDir="false" afterPath="$PROJECT_DIR$/ECDH.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,14 +19,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TerminalControl.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
+            <state relative-caret-position="-1338">
+              <caret line="6" column="13" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="13" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#1767#1786#0" />
               </folding>
             </state>
           </provider>
@@ -41,8 +34,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/str_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="36" column="40" lean-forward="true" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
+            <state relative-caret-position="319">
+              <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -53,8 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crypto.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="62">
-              <caret line="879" lean-forward="true" selection-start-line="879" selection-end-line="879" />
+            <state relative-caret-position="290">
+              <caret line="958" column="38" lean-forward="true" selection-start-line="958" selection-start-column="38" selection-end-line="958" selection-end-column="38" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -62,11 +55,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ECDH.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="169" column="18" selection-start-line="169" selection-start-column="8" selection-end-line="169" selection-end-column="18" />
+            <state relative-caret-position="313">
+              <caret line="178" column="10" selection-start-line="178" selection-start-column="10" selection-end-line="178" selection-end-column="10" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -77,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TerminalEventListener.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="25" />
+            <state relative-caret-position="374">
+              <caret line="19" column="20" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="20" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -119,7 +112,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EventListen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
+            <state relative-caret-position="660">
               <caret line="33" column="73" lean-forward="true" selection-start-line="33" selection-start-column="73" selection-end-line="33" selection-end-column="73" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
@@ -131,7 +124,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ServerControl.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1012">
+            <state relative-caret-position="968">
               <caret line="46" column="78" lean-forward="true" selection-start-line="46" selection-start-column="78" selection-end-line="46" selection-end-column="78" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -164,6 +157,7 @@
       <find>init</find>
       <find>point</find>
       <find>point_neg</find>
+      <find>back_key</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -175,6 +169,7 @@
       <replace>web3</replace>
       <replace>返回密钥的指纹，它是其标识符的前4个字节。</replace>
       <replace>str_test</replace>
+      <replace>generate_keys</replace>
     </replaceStrings>
     <dirStrings>
       <dir>G:\untitled</dir>
@@ -215,14 +210,14 @@
         <option value="$PROJECT_DIR$/str_test.py" />
         <option value="$PROJECT_DIR$/TerminalEventListener.py" />
         <option value="$PROJECT_DIR$/crypto.py" />
-        <option value="$PROJECT_DIR$/ECDH.py" />
         <option value="$PROJECT_DIR$/TerminalControl.py" />
+        <option value="$PROJECT_DIR$/ECDH.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
-    <option name="width" value="979" />
+    <option name="width" value="980" />
     <option name="height" value="1040" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -276,7 +271,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.str_test">
+  <component name="RunManager" selected="Python.ECDH">
     <configuration name="ECDH" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Web3" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -389,9 +384,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ECDH" />
         <item itemvalue="Python.str_test" />
         <item itemvalue="Python.TerminalEventListener" />
-        <item itemvalue="Python.ECDH" />
         <item itemvalue="Python.TerminalControl" />
         <item itemvalue="Python.ServerControl" />
       </list>
@@ -443,7 +438,12 @@
       <workItem from="1556328724027" duration="13372000" />
       <workItem from="1556415026595" duration="20495000" />
       <workItem from="1556498543274" duration="5839000" />
-      <workItem from="1556507211541" duration="6751000" />
+      <workItem from="1556507211541" duration="7264000" />
+      <workItem from="1556601220966" duration="624000" />
+      <workItem from="1556760906663" duration="3328000" />
+      <workItem from="1556938149962" duration="1368000" />
+      <workItem from="1557023139972" duration="2708000" />
+      <workItem from="1557107159327" duration="14073000" />
     </task>
     <task id="LOCAL-00001" summary="1.0">
       <created>1554606930858</created>
@@ -557,11 +557,18 @@
       <option name="project" value="LOCAL" />
       <updated>1556157530116</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="1.0">
+      <created>1556539403048</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1556539403048</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="297134000" />
+    <option name="totallyTimeSpent" value="319748000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -576,12 +583,12 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.77530366" visible="true" weight="0.1689008" />
-      <window_info id="Structure" order="1" sideWeight="0.22469635" side_tool="true" visible="true" weight="0.1689008" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7656566" visible="true" weight="0.17895442" />
+      <window_info id="Structure" order="1" sideWeight="0.23434344" side_tool="true" visible="true" weight="0.17895442" />
       <window_info id="Favorites" order="2" sideWeight="0.50141644" side_tool="true" weight="0.18699732" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4953083" visible="true" weight="0.21104816" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4953083" visible="true" weight="0.29886687" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.28611898" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -591,7 +598,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50469166" side_tool="true" weight="0.3654391" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.34844193" />
-      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49865952" visible="true" weight="0.30028328" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49865952" weight="0.12181303" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -614,7 +621,7 @@
     <SUITE FILE_PATH="coverage/Web3$Updata_To_Ipfs.coverage" NAME="Updata_To_Ipfs Coverage Results" MODIFIED="1554170084853" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Web3$str_test.coverage" NAME="str_test Coverage Results" MODIFIED="1556502336583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Web3$test.coverage" NAME="test Coverage Results" MODIFIED="1554709128375" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Web3$ECDH.coverage" NAME="ECDH Coverage Results" MODIFIED="1556502270477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Web3$ECDH.coverage" NAME="ECDH Coverage Results" MODIFIED="1557147690150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Web3$TerminalControl.coverage" NAME="TerminalControl Coverage Results" MODIFIED="1556280768032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Web3$TerminalEventListener.coverage" NAME="TerminalEventListener Coverage Results" MODIFIED="1556502332031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Web3$Diffie_Hellman.coverage" NAME="Diffie_Hellman Coverage Results" MODIFIED="1556104510464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -627,9 +634,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TransactionControl.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/TransactionControl.py" />
     <entry file="file://$PROJECT_DIR$/../virtualenv/py36_web3/Lib/site-packages/web3/utils/filters.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="143">
@@ -920,19 +925,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ServerControl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1012">
-          <caret line="46" column="78" lean-forward="true" selection-start-line="46" selection-start-column="78" selection-end-line="46" selection-end-column="78" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/EventListen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
+        <state relative-caret-position="660">
           <caret line="33" column="73" lean-forward="true" selection-start-line="33" selection-start-column="73" selection-end-line="33" selection-end-column="73" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
@@ -940,53 +935,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ServerControl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="968">
+          <caret line="46" column="78" lean-forward="true" selection-start-line="46" selection-start-column="78" selection-end-line="46" selection-end-column="78" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/crypto.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="879" lean-forward="true" selection-start-line="879" selection-end-line="879" />
+        <state relative-caret-position="290">
+          <caret line="958" column="38" lean-forward="true" selection-start-line="958" selection-start-column="38" selection-end-line="958" selection-end-column="38" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/str_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="36" column="40" lean-forward="true" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TerminalEventListener.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="25" />
+        <state relative-caret-position="374">
+          <caret line="19" column="20" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="20" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ECDH.py">
+    <entry file="file://$PROJECT_DIR$/TerminalControl.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="169" column="18" selection-start-line="169" selection-start-column="8" selection-end-line="169" selection-end-column="18" />
+        <state relative-caret-position="-1338">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="13" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TerminalControl.py">
+    <entry file="file://$PROJECT_DIR$/str_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
+        <state relative-caret-position="319">
+          <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#1767#1786#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ECDH.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="178" column="10" selection-start-line="178" selection-start-column="10" selection-end-line="178" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

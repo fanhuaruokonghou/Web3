@@ -148,50 +148,32 @@ def scalar_mult(k, point):
     return result
 
 
-def make_keypair():
-    """生成私钥"""
-    private_key = random.randrange(1, curve.n)
-    public_key = scalar_mult(private_key, curve.g)
-    return private_key, public_key
-
-
 # Keypair generation and ECDHE ################################################
 # 生成公私钥对
-def back_key():
-    private_key, public_key = make_keypair()
+def generate_keys():
+    while True:
+        private_key = random.randrange(1, curve.n)
+        public_key = scalar_mult(private_key, (curve.g[0], curve.g[1]))
+        if (len(hex(public_key[0])) == len(hex(public_key[1]))
+                and (len(hex(public_key[0])) == 66)):
+            break
     private_key = hex(private_key)
-    public_key = '04' + hex(public_key[0])[2:] + hex(public_key[1])[2:]
     return private_key, public_key
 
 
 # 获取共同秘密
-def get_secret(private_key, public_key):
+def get_secret(public_key):
     if public_key[0:2] == '04':
-        public_key = (int(public_key[2:66], 16), int(public_key[66:], 16))
-        return scalar_mult(int(private_key, 16), public_key)
+        private_key_owner, public_key_owner = generate_keys()
+        public_key_other = (int(public_key[2:66], 16), int(public_key[66:], 16))
+        secret = scalar_mult(int(private_key_owner, 16), public_key_other)
+        sec = hex(secret[0])[2:]
+        while len(sec) < 65:
+            sec = "0" + sec;
+        return sec, '04' + hex(public_key_owner[0])[2:] + hex(public_key_owner[1])[2:]
     else:
         return '公钥格式错误'
 
 
 if __name__ == '__main__':
-    # print('Curve:', curve.name)
-    #
-    # # Alice generates her own keypair.
-    # alice_private_key, alice_public_key = \
-    #     make_keypair(int('0x880f21dd86691d4ffcbdc8097959b1eafe95f906ea73f7e3bda5b7c851e023a7', 16))
-    # print("Alice's private key:", hex(alice_private_key))
-    # print("Alice's public key: (0x{:x}, 0x{:x})".format(*alice_public_key))
-    #
-    # # Bob generates his own key pair.
-    # bob_private_key, bob_public_key = \
-    #     make_keypair(int('0x77315fe58ddd21b61dff54a89995fdb4ee19148e3f8a61d87017ce3d686b15eb', 16))
-    # print("Bob's private key:", hex(bob_private_key))
-    # print("Bob's public key: (0x{:x}, 0x{:x})".format(*bob_public_key))
-    #
-    # # Alice and Bob exchange their public keys and calculate the shared secret.
-    # s1 = scalar_mult(alice_private_key, bob_public_key)
-    # s2 = scalar_mult(bob_private_key, alice_public_key)
-    # print(s1)
-    # print(int('0xa9e1886d6dd04b127073e1d89f3d1d5b7629db3299eebe5cd97860a8788692ee', 16))
-    # assert s1 == s2
-    print(get_secret('0x2b6b02c47784bdef65368391f5e979e6492540260fae33d76bdb0b38396e5325', '04140ec2f9e95424126fef5cacf8501b1da5c24af2c8b1913640bd4159e19a1f89f1be1cd4d2becbff4f6077e9bda7a69a71b65e364c3e2c7d94e6dad4c822ffaa'))
+    print()
