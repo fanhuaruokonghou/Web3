@@ -169,7 +169,7 @@ def get_secret(public_key):
         secret = scalar_mult(int(private_key_owner, 16), public_key_other)
         sec = hex(secret[0])[2:]
         while len(sec) < 65:
-            sec = "0" + sec;
+            sec = "0" + sec
         return sec, '04' + hex(public_key_owner[0])[2:] + hex(public_key_owner[1])[2:]
     else:
         return '公钥格式错误'

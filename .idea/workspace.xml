@@ -58,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ECDH.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="178" column="10" selection-start-line="178" selection-start-column="10" selection-end-line="178" selection-end-column="10" />
+            <state relative-caret-position="203">
+              <caret line="171" column="27" lean-forward="true" selection-start-line="171" selection-start-column="27" selection-end-line="171" selection-end-column="27" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -443,7 +443,7 @@
       <workItem from="1556760906663" duration="3328000" />
       <workItem from="1556938149962" duration="1368000" />
       <workItem from="1557023139972" duration="2708000" />
-      <workItem from="1557107159327" duration="14073000" />
+      <workItem from="1557107159327" duration="14295000" />
     </task>
     <task id="LOCAL-00001" summary="1.0">
       <created>1554606930858</created>
@@ -564,11 +564,18 @@
       <option name="project" value="LOCAL" />
       <updated>1556539403048</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="1.0">
+      <created>1557148540348</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1557148540348</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="319748000" />
+    <option name="totallyTimeSpent" value="319970000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -987,8 +994,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ECDH.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="178" column="10" selection-start-line="178" selection-start-column="10" selection-end-line="178" selection-end-column="10" />
+        <state relative-caret-position="203">
+          <caret line="171" column="27" lean-forward="true" selection-start-line="171" selection-start-column="27" selection-end-line="171" selection-end-column="27" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
