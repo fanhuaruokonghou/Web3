@@ -59,7 +59,7 @@ class PrivateKeyBase(object):
 
     @property
     def public_key(self):
-        """ 返回改私钥的公钥
+        """ 返回该私钥的公钥
 
         Returns:
             PublicKey:
@@ -472,6 +472,7 @@ class PublicKey(PublicKeyBase):
         """
         return self.point.compressed_bytes
 
+
 class HDKey(object):
     """ Base class for HDPrivateKey and HDPublicKey.
 
@@ -504,19 +505,14 @@ class HDKey(object):
 
     @staticmethod
     def from_bytes(b):
-        """ Generates either a HDPrivateKey or HDPublicKey from the underlying
-        bytes.
-
-        The serialization must conform to the description in:
-        https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#serialization-format
+        """ 从底层字节生成HDPrivateKey或HDPublicKey。
 
         Args:
             b (bytes): A byte stream conforming to the above.
 
         Returns:
             HDPrivateKey or HDPublicKey:
-                Either an HD private or
-                public key object, depending on what was serialized.
+                HD private 还是 public key 对象, 取决于序列化的内容。
         """
         if len(b) < 78:
             raise ValueError("b must be at least 78 bytes long.")
@@ -557,8 +553,7 @@ class HDKey(object):
 
     @staticmethod
     def from_hex(h):
-        """ Generates either a HDPrivateKey or HDPublicKey from the underlying
-        hex-encoded string.
+        """ 从底层的十六进制编码字符串生成HDPrivateKey或HDPublicKey。
 
         The serialization must conform to the description in:
         https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#serialization-format
@@ -599,7 +594,7 @@ class HDKey(object):
     @staticmethod
     def parse_path(path):
         if isinstance(path, str):
-            # Remove trailing "/"
+            # 删除结尾的 "/"
             p = path.rstrip("/").split("/")
         elif isinstance(path, bytes):
             p = path.decode('utf-8').rstrip("/").split("/")
@@ -638,7 +633,7 @@ class HDKey(object):
 
     @property
     def master(self):
-        """ Whether or not this is a master node.
+        """ 判断是否是主节点。
 
         Returns:
             bool: True if this is a master node, False otherwise.
@@ -695,6 +690,7 @@ class HDKey(object):
         return base58.b58encode_check(b)
 
     def _serialize(self, testnet=False):
+        # 序列化
         version = self.TESTNET_VERSION if testnet else self.MAINNET_VERSION
         key_bytes = self._key.compressed_bytes if isinstance(self, HDPublicKey) else b'\x00' + bytes(self._key)
         return (version.to_bytes(length=4, byteorder='big') +
@@ -746,7 +742,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
         """ 从助记符生成主密钥。
 
         Args:
-            mnemonic (str): 表示从中生成主密钥的种子的助记句。
+            mnemonic (str): 表示从中生成主密钥的种子的助记词。
             passphrase (str): 密码如果使用的话。
 
         Returns:
@@ -898,8 +894,8 @@ class HDPublicKey(HDKey, PublicKeyBase):
 
     """
 
-    MAINNET_VERSION = 0x0488B21E
-    TESTNET_VERSION = 0x043587CF
+    #MAINNET_VERSION = 0x0488B21E
+    #TESTNET_VERSION = 0x043587CF
 
     @staticmethod
     def from_parent(parent_key, i):

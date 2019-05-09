@@ -23,7 +23,8 @@ def init_mnemonic(mnemonic, index, password):
     master_key = HDPrivateKey.master_key_from_mnemonic(mnemonic, password)
     root_keys = HDKey.from_path(master_key, "m/44'/60'/0'")
     acct_private_key = root_keys[-1]
-    keys = HDKey.from_path(acct_private_key, '{change}/{index}'.format(change=0, index=index))
+    for i in range(index):
+        keys = HDKey.from_path(acct_private_key, '{change}/{index}'.format(change=0, index=i))
     private_key_mnemonic = keys[-1]
     global private_key
     private_key = private_key_mnemonic._key.to_hex()
