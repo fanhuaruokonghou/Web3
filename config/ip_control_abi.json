@@ -62,7 +62,7 @@
       "inputs": [
         {
           "name": "number",
-          "type": "uint256"
+          "type": "string"
         },
         {
           "name": "ip",
@@ -82,7 +82,7 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function",
-      "signature": "0xbcb8dd1b"
+      "signature": "0xa9d24db1"
     },
     {
       "constant": true,
@@ -91,7 +91,7 @@
       "outputs": [
         {
           "name": "",
-          "type": "uint256[]"
+          "type": "string[]"
         },
         {
           "name": "",
