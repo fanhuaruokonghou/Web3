@@ -1,11 +1,7 @@
-import base58
-import base64
 import hashlib
 import hmac
 from mnemonic.mnemonic import Mnemonic
-import random
 from two1.bitcoin.utils import bytes_to_str
-from two1.bitcoin.utils import rand_bytes
 from two1.crypto.ecdsa import ECPointAffine
 from two1.crypto.ecdsa import secp256k1
 from eth_utils import encode_hex
@@ -34,24 +30,12 @@ def get_bytes(s):
 class PrivateKeyBase(object):
     """  PrivateKey 和 HDPrivateKey的基础类
 
-    Args:
+    参数:
         k (int): 私钥.
 
-    Returns:
+    返回值:
         PrivateKey: 私钥对象.
     """
-
-    @staticmethod
-    def from_b58check(private_key):
-        """ 解码Base58Check编码的私钥
-
-        Args:
-            private_key (str): 经过Base58Check编码的对象.
-
-        Returns:
-            PrivateKey: 私钥对象
-        """
-        raise NotImplementedError
 
     def __init__(self, k):
         self.key = k
@@ -61,24 +45,16 @@ class PrivateKeyBase(object):
     def public_key(self):
         """ 返回该私钥的公钥
 
-        Returns:
+        返回值:
             PublicKey:
                 与此私钥对应的PublicKey对象。
         """
         return self._public_key
 
-    def to_b58check(self, testnet=False):
-        """ 生成此私钥的Base58Check编码.
-
-        Returns:
-            str: 表示密钥的Base58Check编码字符串。
-        """
-        raise NotImplementedError
-
     def to_hex(self):
         """ 生成序列化密钥的十六进制编码。
 
-        Returns:
+        返回值:
            str: 表示密钥的十六进制编码字符串。
         """
         return bytes_to_str(bytes(self))
@@ -93,11 +69,11 @@ class PrivateKeyBase(object):
 class PublicKeyBase(object):
     """ PublicKey and HDPublicKey的基类。
 
-    Args:
+    参数:
         x (int): x坐标.
         y (int): y坐标.
 
-    Returns:
+    返回值:
         PublicKey: 表示公钥的对象。
 
     """
@@ -106,10 +82,10 @@ class PublicKeyBase(object):
     def from_bytes(key_bytes):
         """ 从字节（或十六进制）字符串生成公钥对象。
 
-        Args:
+        参数:
             key_bytes (bytes or str): 一个字节流。
 
-        Returns:
+        返回值:
             PublicKey: 公钥对象.
         """
         raise NotImplementedError
@@ -118,10 +94,10 @@ class PublicKeyBase(object):
     def from_private_key(private_key):
         """ 根据私钥对象生成公钥对象.
 
-        Args:
+        参数:
             private_key (PrivateKey): 私钥对象
 
-        Returns:
+        返回值:
             PublicKey: 公钥对象.
         """
         return private_key.public_key
@@ -132,9 +108,9 @@ class PublicKeyBase(object):
     def hash160(self, compressed=True):
         """ 返回公钥的SHA-256哈希的RIPEMD-160哈希。
 
-        Args:
+        参数:
             compressed (bool): 是否应使用压缩密钥。
-        Returns:
+        返回值:
             bytes: RIPEMD-160字节字符串。
         """
         raise NotImplementedError
@@ -142,11 +118,11 @@ class PublicKeyBase(object):
     def address(self, compressed=True, testnet=False):
         """ 返回HASH160的Base58Check编码版本的Address属性。
 
-        Args:
+        参数:
             compressed (bool): 是否压缩公钥.
             testnet (bool): 密钥是否用于测试网络。 False表示主网使用情况.
 
-        Returns:
+        返回值:
             bytes: Base58Check编码的字符串
         """
         raise NotImplementedError
@@ -154,7 +130,7 @@ class PublicKeyBase(object):
     def to_hex(self):
         """ 序列化字节流的十六进制表示。
 
-        Returns:
+        返回值:
             h (str): 十六进制字符串.
         """
         return bytes_to_str(bytes(self))
@@ -169,7 +145,7 @@ class PublicKeyBase(object):
     def compressed_bytes(self):
         """ 字节串对应于该公钥的压缩表示。
 
-        Returns:
+        返回值:
             b (bytes): 33字节的字符串.
         """
         raise NotImplementedError
@@ -181,79 +157,12 @@ class PrivateKey(PrivateKeyBase):
     该类提供生成私钥的功能，
     获取相应的公钥和序列化/反序列化为各种格式。
 
-    Args:
+    参数:
         k (int): 私钥.
 
-    Returns:
+    返回值:
         PrivateKey: 表示私钥的对象.
     """
-    TESTNET_VERSION = 0xEF
-    MAINNET_VERSION = 0x80
-
-    @staticmethod
-    def from_bytes(b):
-        """ 从底层字节生成PrivateKey.
-
-        Args:
-            b (bytes): 包含256位（32字节）整数的字节流.
-
-        Returns:
-            tuple(PrivateKey, bytes): PrivateKey对象和其余字节。
-        """
-        if len(b) < 32:
-            raise ValueError('b must contain at least 32 bytes')
-
-        return PrivateKey(int.from_bytes(b[:32], 'big'))
-
-    @staticmethod
-    def from_hex(h):
-        """ 从十六进制编码的字符串生成PrivateKey。
-
-        Args:
-            h (str): 包含256位（32字节）整数的十六进制编码字符串。
-
-        Returns:
-            PrivateKey: 私钥对象.
-        """
-        return PrivateKey.from_bytes(bytes.fromhex(h))
-
-    @staticmethod
-    def from_int(i):
-        """ 从整数初始化私钥.
-
-        Args:
-            i (int): 作为私钥的整数。
-
-        Returns:
-            PrivateKey: 表示私钥的对象。
-        """
-        return PrivateKey(i)
-
-    @staticmethod
-    def from_b58check(private_key):
-        """ 解码Base58Check编码的私钥.
-
-        Args:
-            private_key (str):Base58Check编码的私钥.
-
-        Returns:
-            PrivateKey: 私钥对象
-        """
-        b58dec = base58.b58decode_check(private_key)
-        version = b58dec[0]
-        assert version in [PrivateKey.TESTNET_VERSION,
-                           PrivateKey.MAINNET_VERSION]
-
-        return PrivateKey(int.from_bytes(b58dec[1:], 'big'))
-
-    @staticmethod
-    def from_random():
-        """ 从随机整数初始化私钥。
-
-        Returns:
-            PrivateKey: 表示私钥的对象。
-        """
-        return PrivateKey(random.SystemRandom().randrange(1, bitcoin_curve.n))
 
     def __init__(self, k):
         self.key = k
@@ -263,7 +172,7 @@ class PrivateKey(PrivateKeyBase):
     def public_key(self):
         """ 返回与此私钥关联的公钥。
 
-        Returns:
+        返回值:
             PublicKey:
                 与此私钥对应的PublicKey对象。
         """
@@ -271,15 +180,6 @@ class PrivateKey(PrivateKeyBase):
             self._public_key = PublicKey.from_point(
                 bitcoin_curve.public_key(self.key))
         return self._public_key
-
-    def to_b58check(self, testnet=False):
-        """生成此私钥的Base58Check编码。
-
-        Returns:
-            str: 表示密钥的Base58Check编码字符串。
-        """
-        version = self.TESTNET_VERSION if testnet else self.MAINNET_VERSION
-        return base58.b58encode_check(bytes([version]) + bytes(self))
 
     def __bytes__(self):
         return self.key.to_bytes(32, 'big')
@@ -293,120 +193,25 @@ class PublicKey(PublicKeyBase):
 
     此类为使用ECDSA公钥提供了高级API，特别是用于比特币（secp256k1）。
 
-    Args:
+    参数:
         x (int): x坐标.
         y (int): y坐标.
 
-    Returns:
+    返回值:
         PublicKey: 表示公钥的对象.
     """
-
-    TESTNET_VERSION = 0x6F
-    MAINNET_VERSION = 0x00
 
     @staticmethod
     def from_point(p):
         """ 从包含x，y坐标的任何对象生成公钥对象。
 
-        Args:
+        参数:
             p (Point):一个对象，包含secp256k1曲线上某点的二维仿射表示。
 
-        Returns:
+        返回值:
             PublicKey: 公钥对象.
         """
         return PublicKey(p.x, p.y)
-
-    @staticmethod
-    def from_int(i):
-        """ 从整数生成公钥对象。
-
-        Note:
-            这假设整数的高32字节是公钥点的x分量，低32字节是y分量。
-
-        Args:
-            i (Bignum): 一个512位整数，表示secp256k1曲线上的公钥点.
-
-        Returns:
-            PublicKey: 公钥对象.
-        """
-        point = ECPointAffine.from_int(bitcoin_curve, i)
-        return PublicKey.from_point(point)
-
-    @staticmethod
-    def from_base64(b64str, testnet=False):
-        """ 从Base64编码的字符串生成公钥对象.
-
-        Args:
-            b64str (str): Base64编码的字符串.
-            testnet (bool) (Optional): 如果为True，则更改密钥前面的版本。
-
-        Returns:
-            PublicKey: 公钥对象.
-        """
-        return PublicKey.from_bytes(base64.b64decode(b64str))
-
-    @staticmethod
-    def from_bytes(key_bytes):
-        """ 从字节（或十六进制）字符串生成公钥对象。
-
-        字节流必须是SEC种类
-        （http://www.secg.org/）：从单个字节开始讲述
-        什么关键表示如下。 完整的，未压缩的密钥
-        表示为：0x04后跟64个字节
-        点的x和y分量。 对于压缩密钥
-        对于偶数y分量，0x02后跟32个字节
-        包含x组件。 对于带有压缩的密钥
-        奇数y分量，0x03后跟32个字节
-        x组件。
-
-        Args:
-            key_bytes (bytes or str): 符合上述内容的字节流.
-
-        Returns:
-            PublicKey: 公钥对象.
-        """
-        b = get_bytes(key_bytes)
-        key_bytes_len = len(b)
-
-        key_type = b[0]
-        if key_type == 0x04:
-            # Uncompressed
-            if key_bytes_len != 65:
-                raise ValueError("key_bytes must be exactly 65 bytes long when uncompressed.")
-
-            x = int.from_bytes(b[1:33], 'big')
-            y = int.from_bytes(b[33:65], 'big')
-        elif key_type == 0x02 or key_type == 0x03:
-            if key_bytes_len != 33:
-                raise ValueError("key_bytes must be exactly 33 bytes long when compressed.")
-
-            x = int.from_bytes(b[1:33], 'big')
-            ys = bitcoin_curve.y_from_x(x)
-
-            # 选择与key_type对应的那个
-            last_bit = key_type - 0x2
-            for y in ys:
-                if y & 0x1 == last_bit:
-                    break
-        else:
-            return None
-
-        return PublicKey(x, y)
-
-    @staticmethod
-    def from_hex(h):
-        """ 从十六进制编码的字符串生成公钥对象。
-
-        有关十六进制字符串的要求，请参见from_bytes（）。
-
-        Args:
-            h (str): 十六进制字符串
-
-        Returns:
-            PublicKey: 公钥对象.
-        """
-        return PublicKey.from_bytes(h)
-
 
     def __init__(self, x, y):
         p = ECPointAffine(bitcoin_curve, x, y)
@@ -429,9 +234,9 @@ class PublicKey(PublicKeyBase):
     def hash160(self, compressed=True):
         """ 返回公钥的SHA-256哈希的RIPEMD-160哈希。
 
-        Args:
+        参数:
             compressed (bool): 是否应该压缩密钥使用。
-        Returns:
+        返回值:
             bytes: RIPEMD-160字节字符串.
         """
         return self.ripe_compressed if compressed else self.ripe
@@ -439,21 +244,13 @@ class PublicKey(PublicKeyBase):
     def address(self, compressed=True):
         """ 返回HASH160的Base58Check编码版本的Address属性。
 
-        Args:
+        参数:
             compressed (bool): 是否应使用压缩密钥。
 
-        Returns:
+        返回值:
             bytes: Base58Check编码的字符串
         """
         return encode_hex(self.keccak[12:])
-
-    def to_base64(self):
-        """ 序列化字节流的十六进制表示。
-
-        Returns:
-            b (str): Base64编码的字符串.
-        """
-        return base64.b64encode(bytes(self))
 
     def __int__(self):
         mask = 2 ** 256 - 1
@@ -467,7 +264,7 @@ class PublicKey(PublicKeyBase):
         """ Byte string corresponding to a compressed representation
         of this public key.
 
-        Returns:
+        返回值:
             b (bytes): 一个33字节长的字节字符串。
         """
         return self.point.compressed_bytes
@@ -476,102 +273,21 @@ class PublicKey(PublicKeyBase):
 class HDKey(object):
     """ Base class for HDPrivateKey and HDPublicKey.
 
-    Args:
+    参数:
         key (PrivateKey or PublicKey): 用于签名/验证的基础简单私钥或公钥。
         chain_code (bytes): 与HD密钥关联的链代码。
         depth (int): 主密钥低于主节点多少级别。 根据定义，主节点的depth= 0。
         index (int): 介于0和0xffffffff之间的值，表示子编号。 value> = 0x80000000被视为强化子项。
         parent_fingerprint (bytes): 父节点的指纹。 这是主节点的0x00000000。
 
-    Returns:
+    返回值:
         HDKey: An HDKey object.
     """
-    @staticmethod
-    def from_b58check(key):
-        """ Decodes a Base58Check encoded key.
-
-        The encoding must conform to the description in:
-        https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#serialization-format
-
-        Args:
-            key (str): A Base58Check encoded key.
-
-        Returns:
-            HDPrivateKey or HDPublicKey:
-                Either an HD private or
-                public key object, depending on what was serialized.
-        """
-        return HDKey.from_bytes(base58.b58decode_check(key))
-
-    @staticmethod
-    def from_bytes(b):
-        """ 从底层字节生成HDPrivateKey或HDPublicKey。
-
-        Args:
-            b (bytes): A byte stream conforming to the above.
-
-        Returns:
-            HDPrivateKey or HDPublicKey:
-                HD private 还是 public key 对象, 取决于序列化的内容。
-        """
-        if len(b) < 78:
-            raise ValueError("b must be at least 78 bytes long.")
-
-        version = int.from_bytes(b[:4], 'big')
-        depth = b[4]
-        parent_fingerprint = b[5:9]
-        index = int.from_bytes(b[9:13], 'big')
-        chain_code = b[13:45]
-        key_bytes = b[45:78]
-
-        rv = None
-        if version == HDPrivateKey.MAINNET_VERSION or version == HDPrivateKey.TESTNET_VERSION:
-            if key_bytes[0] != 0:
-                raise ValueError("First byte of private key must be 0x00!")
-
-            private_key = int.from_bytes(key_bytes[1:], 'big')
-            rv = HDPrivateKey(key=private_key,
-                              chain_code=chain_code,
-                              index=index,
-                              depth=depth,
-                              parent_fingerprint=parent_fingerprint)
-        elif version == HDPublicKey.MAINNET_VERSION or version == HDPublicKey.TESTNET_VERSION:
-            if key_bytes[0] != 0x02 and key_bytes[0] != 0x03:
-                raise ValueError("First byte of public key must be 0x02 or 0x03!")
-
-            public_key = PublicKey.from_bytes(key_bytes)
-            rv = HDPublicKey(x=public_key.point.x,
-                             y=public_key.point.y,
-                             chain_code=chain_code,
-                             index=index,
-                             depth=depth,
-                             parent_fingerprint=parent_fingerprint)
-        else:
-            raise ValueError("incorrect encoding.")
-
-        return rv
-
-    @staticmethod
-    def from_hex(h):
-        """ 从底层的十六进制编码字符串生成HDPrivateKey或HDPublicKey。
-
-        The serialization must conform to the description in:
-        https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#serialization-format
-
-        Args:
-            h (str): A hex-encoded string conforming to the above.
-
-        Returns:
-            HDPrivateKey or HDPublicKey:
-                Either an HD private or
-                public key object, depending on what was serialized.
-        """
-        return HDKey.from_bytes(bytes.fromhex(h))
 
     @staticmethod
     def from_path(root_key, path):
         p = HDKey.parse_path(path)
-
+        print(p)
         if p[0] == "m":
             if root_key.master:
                 p = p[1:]
@@ -588,7 +304,7 @@ class HDKey(object):
             k = keys[-1]
             klass = k.__class__
             keys.append(klass.from_parent(k, index))
-
+        print(len(keys))
         return keys
 
     @staticmethod
@@ -601,21 +317,6 @@ class HDKey(object):
         else:
             p = list(path)
         return p
-
-    @staticmethod
-    def path_from_indices(l):
-        p = []
-        for n in l:
-            if n == "m":
-                p.append(n)
-            else:
-                if n & 0x80000000:
-                    _n = n & 0x7fffffff
-                    p.append(str(_n) + "'")
-                else:
-                    p.append(str(n))
-
-        return "/".join(p)
 
     def __init__(self, key, chain_code, index, depth, parent_fingerprint):
         if index < 0 or index > 0xffffffff:
@@ -635,32 +336,25 @@ class HDKey(object):
     def master(self):
         """ 判断是否是主节点。
 
-        Returns:
+        返回值:
             bool: True if this is a master node, False otherwise.
         """
         return self.depth == 0
 
     @property
     def hardened(self):
-        """ Whether or not this is a hardened node.
+        """ 这是否是一个强化节点。强化节点是索引 >= 0x80000000的节点。
 
-        Hardened nodes are those with indices >= 0x80000000.
-
-        Returns:
+        返回值:
             bool: True if this is hardened, False otherwise.
         """
-        # A hardened key is a key with index >= 2 ** 31, so
-        # we check that the MSB of a uint32 is set.
         return self.index & 0x80000000
 
     @property
     def identifier(self):
         """ 返回键的标识符。
 
-        密钥的标识符和指纹定义为：
-        https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#key-identifiers
-
-        Returns:
+        返回值:
             bytes: 一个20字节的RIPEMD-160哈希。
         """
         raise NotImplementedError
@@ -672,42 +366,16 @@ class HDKey(object):
         密钥的标识符和指纹定义为：
         https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#key-identifiers
 
-        Returns:
+        返回值:
             bytes: RIPEMD-160哈希的前4个字节。
         """
         return self.identifier[:4]
-
-    def to_b58check(self, testnet=False):
-        """ Generates a Base58Check encoding of this key.
-
-        Args:
-            testnet (bool): True if the key is to be used with
-                testnet, False otherwise.
-        Returns:
-            str: A Base58Check编码的字符串 representing the key.
-        """
-        b = self.testnet_bytes if testnet else bytes(self)
-        return base58.b58encode_check(b)
-
-    def _serialize(self, testnet=False):
-        # 序列化
-        version = self.TESTNET_VERSION if testnet else self.MAINNET_VERSION
-        key_bytes = self._key.compressed_bytes if isinstance(self, HDPublicKey) else b'\x00' + bytes(self._key)
-        return (version.to_bytes(length=4, byteorder='big') +
-                bytes([self.depth]) +
-                self.parent_fingerprint +
-                self.index.to_bytes(length=4, byteorder='big') +
-                self.chain_code +
-                key_bytes)
-
-    def __bytes__(self):
-        return self._serialize()
 
     @property
     def testnet_bytes(self):
         """ testnet密钥的序列化。
 
-        Returns:
+        返回值:
             bytes:
                 密钥的78字节序列化，特别是对于testnet（即前2个字节将是0x0435）。
         """
@@ -715,72 +383,29 @@ class HDKey(object):
 
 
 class HDPrivateKey(HDKey, PrivateKeyBase):
-    """ 根据BIP-0032实现HD私钥：
-    https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
-    对于绝大多数用例，3个静态函数
-    HDPrivateKey.master_key_from_entropy，
-    HDPrivateKey.master_key_from_seed和
-    将使用HDPrivateKey.from_parent）而不是直接使用
-    构建一个对象。
-
-    Args:
-        key (PrivateKey or PublicKey): 用于签名/验证的基础简单私钥或公钥。
-        chain_code (bytes): 与HD密钥关联的链代码。
-        depth (int): 主密钥低于主节点多少级别。 根据定义，主节点的depth= 0。
-        index (int): 介于0和0xffffffff之间的值，表示子编号。 value> = 0x80000000被视为强化子项。
-        parent_fingerprint (bytes): 父节点的指纹。 这是主节点的0x00000000。
-
-    Returns:
-        HDKey: HDKey对象.
-
-    """
-    MAINNET_VERSION = 0x0488ADE4
-    TESTNET_VERSION = 0x04358394
 
     @staticmethod
     def master_key_from_mnemonic(mnemonic, passphrase=''):
         """ 从助记符生成主密钥。
 
-        Args:
+        参数:
             mnemonic (str): 表示从中生成主密钥的种子的助记词。
             passphrase (str): 密码如果使用的话。
 
-        Returns:
+        返回值:
             HDPrivateKey: 主私钥。
         """
         return HDPrivateKey.master_key_from_seed(
             Mnemonic.to_seed(mnemonic, passphrase))
 
     @staticmethod
-    def master_key_from_entropy(passphrase='', strength=128):
-        """ 从系统熵生成主密钥。
-
-        Args:
-            strength (int): 所需的熵量。 这应该是128到256之间的32的倍数。
-            passphrase (str): 生成的助记符字符串的可选密码。
-
-        Returns:
-            HDPrivateKey, str:
-                一个由主私钥和一个助记符字符串组成的元组，可以从中恢复种子。
-        """
-        if strength % 32 != 0:
-            raise ValueError("strength must be a multiple of 32")
-        if strength < 128 or strength > 256:
-            raise ValueError("strength should be >= 128 and <= 256")
-        entropy = rand_bytes(strength // 8)
-        m = Mnemonic(language='english')
-        n = m.to_mnemonic(entropy)
-        return HDPrivateKey.master_key_from_seed(
-            Mnemonic.to_seed(n, passphrase)), n
-
-    @staticmethod
     def master_key_from_seed(seed):
         """ 从提供的种子生成主密钥。
 
-        Args:
+        参数:
             seed (bytes or str): 一串字节或十六进制字符串
 
-        Returns:
+        返回值:
             HDPrivateKey: 主私钥。
         """
         S = get_bytes(seed)
@@ -796,7 +421,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
     def from_parent(parent_key, i):
         """ 从父私钥中派生子私钥。 无法从公共父密钥派生子私钥。
 
-        Args:
+        参数:
             parent_private_key (HDPrivateKey):
         """
         if not isinstance(parent_key, HDPrivateKey):
@@ -831,7 +456,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
     def __init__(self, key, chain_code, index, depth,
                  parent_fingerprint=b'\x00\x00\x00\x00'):
         if index < 0 or index > 0xffffffff:
-            raise ValueError("index is out of range: 0 <= index <= 2**32 - 1")
+            raise ValueError("index is out of range: 0  <= index <= 2**32 -1")
 
         private_key = PrivateKey(key)
         HDKey.__init__(self, private_key, chain_code, index, depth,
@@ -842,7 +467,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
     def public_key(self):
         """ 返回与此私钥关联的公钥。
 
-        Returns:
+        返回值:
             HDPublicKey:
                 与此私钥对应的HDPublicKey对象。
         """
@@ -865,7 +490,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
         在这种情况下，它将返回相应公钥的RIPEMD-160哈希值。
 
-        Returns:
+        返回值:
             bytes: 一个20字节的RIPEMD-160哈希。
         """
         return self.public_key.hash160()
@@ -875,13 +500,8 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
 
 
 class HDPublicKey(HDKey, PublicKeyBase):
-    """ 根据BIP-0032实现HD公钥：
-    https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
-
-     对于绝大多数用例，静态函数将使用HDPublicKey.from_parent（）而不是直接使用
-     构建一个对象。
-
-    Args:
+    """
+    参数:
         x (int): x 表示公钥的点的组成部分。
         y (int): y 表示公钥的点的组成部分。
         chain_code (bytes): 与HD密钥关联的链代码.
@@ -889,18 +509,14 @@ class HDPublicKey(HDKey, PublicKeyBase):
         index (int): 介于0和0xffffffff之间的值，表示子编号。 值> = 0x80000000被视为强化子项。
         parent_fingerprint (bytes): 父节点的指纹。 这是主节点的0x00000000。
 
-    Returns:
+    返回值:
         HDPublicKey: 一个HDPublicKey对象。
 
     """
 
-    #MAINNET_VERSION = 0x0488B21E
-    #TESTNET_VERSION = 0x043587CF
-
     @staticmethod
     def from_parent(parent_key, i):
-        """
-        """
+
         if isinstance(parent_key, HDPrivateKey):
             # Get child private key
             return HDPrivateKey.from_parent(parent_key, i).public_key
@@ -946,7 +562,7 @@ class HDPublicKey(HDKey, PublicKeyBase):
 
         在这种情况下，它将返回的RIPEMD-160哈希值非扩展公钥。
 
-        Returns:
+        返回值:
             bytes: 一个20字节的RIPEMD-160哈希。
         """
         return self.hash160()
@@ -957,7 +573,7 @@ class HDPublicKey(HDKey, PublicKeyBase):
         Note:
             这始终返回公钥的压缩版本的哈希值。
 
-        Returns:
+        返回值:
             bytes: RIPEMD-160字节字符串。
         """
         return self._key.hash160(True)
@@ -965,12 +581,11 @@ class HDPublicKey(HDKey, PublicKeyBase):
     def address(self, compressed=True, testnet=False):
         """ 返回HASH160的Base58Check编码版本的Address属性。
 
-        Args:
+        参数:
             compressed (bool): 是否应该压缩密钥
-               be used.
             testnet (bool): 密钥是否用于测试网络。 False表示主网使用情况。
 
-        Returns:
+        返回值:
             bytes: Base58Check编码的字符串
         """
         return self._key.address(True)
@@ -979,7 +594,7 @@ class HDPublicKey(HDKey, PublicKeyBase):
     def compressed_bytes(self):
         """ 字节串对应于该公钥的压缩表示。
 
-        Returns:
+        返回值:
             b (bytes): 一个33字节长的字节字符串。
         """
         return self._key.compressed_bytes

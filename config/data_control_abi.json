@@ -156,7 +156,7 @@
       "inputs": [
         {
           "name": "number",
-          "type": "uint256"
+          "type": "string"
         },
         {
           "name": "file_number",
@@ -200,7 +200,7 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function",
-      "signature": "0x12cff234"
+      "signature": "0x7c995763"
     },
     {
       "constant": true,
@@ -209,7 +209,7 @@
       "outputs": [
         {
           "name": "",
-          "type": "uint256[]"
+          "type": "string[]"
         },
         {
           "name": "",

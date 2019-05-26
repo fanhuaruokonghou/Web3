@@ -35,7 +35,7 @@ def inverse_mod(k, p):
         # k ** -1 = p - (-k) ** -1  (mod p)
         return p - inverse_mod(-k, p)
 
-    # Extended Euclidean algorithm.
+    # 扩展欧几里得定理
     s, old_s = 0, 1
     t, old_t = 1, 0
     r, old_r = p, k
@@ -54,8 +54,6 @@ def inverse_mod(k, p):
     return x % p
 
 
-# Functions that work on curve points #########################################
-
 def is_on_curve(point):
     """如果给定点位于椭圆曲线上，则返回True."""
     if point is None:
@@ -68,7 +66,7 @@ def is_on_curve(point):
 
 
 def point_neg(point):
-    """Returns -point."""
+    """返回 -point."""
     assert is_on_curve(point)
 
     if point is None:
@@ -84,7 +82,7 @@ def point_neg(point):
 
 
 def point_add(point1, point2):
-    """Returns the result of point1 + point2 according to the group law."""
+    """返回point1 + point2结果"""
     assert is_on_curve(point1)
     assert is_on_curve(point2)
 
@@ -106,7 +104,7 @@ def point_add(point1, point2):
         # 两点重合
         m = (3 * x1 * x1 + curve.a) * inverse_mod(2 * y1, curve.p)
     else:
-        # This is the case point1 != point2.
+        # 两点不相等
         m = (y1 - y2) * inverse_mod(x1 - x2, curve.p)
 
     x3 = m * m - x1 - x2
@@ -168,7 +166,7 @@ def get_secret(public_key):
         public_key_other = (int(public_key[2:66], 16), int(public_key[66:], 16))
         secret = scalar_mult(int(private_key_owner, 16), public_key_other)
         sec = hex(secret[0])[2:]
-        while len(sec) < 65:
+        while len(sec) < 64:
             sec = "0" + sec
         return sec, '04' + hex(public_key_owner[0])[2:] + hex(public_key_owner[1])[2:]
     else:
@@ -176,4 +174,8 @@ def get_secret(public_key):
 
 
 if __name__ == '__main__':
-    print()
+    s = get_secret("04c73edb63f1c2718d3cac835a457838b97c68e6ce71a8a40315ede30cd5376ee23508b47be9732406a5ed47eb1904747796322f59d4d88269af409427c3909fdc")
+    print("我是Bob：")
+    print("Alice的公钥：" + "04c73edb63f1c2718d3cac835a457838b97c68e6ce71a8a40315ede30cd5376ee23508b47be9732406a5ed47eb1904747796322f59d4d88269af409427c3909fdc")
+    print("我的公钥：" + s[1])
+    print("共同的秘密：" + s[0])
