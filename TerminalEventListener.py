@@ -1,5 +1,5 @@
 import asyncio
-import str_test
+import init
 import json
 
 
@@ -28,9 +28,9 @@ async def log_loop(event_filter, poll_interval):
 
 
 def main():
-    event_filter = str_test.contract_data_instance1.events.addRealTimeTx.createFilter(
+    event_filter = init.contract_tx_instance1.events.addRealTimeTx.createFilter(
         fromBlock='latest')
-    event_filter1 = str_test.contract_data_instance1.events.addTx.createFilter(
+    event_filter1 = init.contract_tx_instance1.events.addTx.createFilter(
         fromBlock='latest', argument_filters={'arg1': 10})
     loop = asyncio.get_event_loop()
     try:

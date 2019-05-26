@@ -38,21 +38,6 @@
       "signature": "0x04a85dfa"
     },
     {
-      "constant": true,
-      "inputs": [],
-      "name": "returnContractAddress",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x0589a27c"
-    },
-    {
       "constant": false,
       "inputs": [
         {
@@ -111,26 +96,6 @@
       "signature": "0x095ea7b3"
     },
     {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "who",
-          "type": "address"
-        }
-      ],
-      "name": "Sellcontributionvalue",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x0a3894dc"
-    },
-    {
       "constant": false,
       "inputs": [
         {
@@ -152,26 +117,6 @@
       "stateMutability": "nonpayable",
       "type": "function",
       "signature": "0x15666013"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "who",
-          "type": "address"
-        }
-      ],
-      "name": "Lastbuytime",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x1595a422"
     },
     {
       "constant": true,
@@ -251,7 +196,7 @@
           "type": "address"
         }
       ],
-      "name": "Buycontributionvalue",
+      "name": "LastbuytimeOnlyOwner",
       "outputs": [
         {
           "name": "",
@@ -261,7 +206,7 @@
       "payable": false,
       "stateMutability": "view",
       "type": "function",
-      "signature": "0x24921cd2"
+      "signature": "0x286ad860"
     },
     {
       "constant": false,
@@ -277,6 +222,50 @@
       "stateMutability": "nonpayable",
       "type": "function",
       "signature": "0x2e1a7d4d"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "TotalbuyerpaymenORsellercollection",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x2f15ce7e"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "name": "spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowanceOnlyOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x2f1d1a03"
     },
     {
       "constant": true,
@@ -309,6 +298,21 @@
       "signature": "0x378dc3dc"
     },
     {
+      "constant": false,
+      "inputs": [],
+      "name": "pauseTransaction",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x385fa147"
+    },
+    {
       "constant": true,
       "inputs": [],
       "name": "_totalSupply",
@@ -324,39 +328,24 @@
       "signature": "0x3eaaf86b"
     },
     {
-      "constant": false,
-      "inputs": [],
-      "name": "unpause",
+      "constant": true,
+      "inputs": [
+        {
+          "name": "who",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOfOnlyOwner",
       "outputs": [
         {
           "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x3f4ba83a"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_value",
           "type": "uint256"
         }
       ],
-      "name": "burn",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function",
-      "signature": "0x42966c68"
+      "signature": "0x448b331b"
     },
     {
       "constant": false,
@@ -402,6 +391,30 @@
       "constant": true,
       "inputs": [
         {
+          "name": "who",
+          "type": "address"
+        },
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "contributionvalueOnlyOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x6c982561"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
           "name": "",
           "type": "address"
         }
@@ -420,12 +433,7 @@
     },
     {
       "constant": true,
-      "inputs": [
-        {
-          "name": "who",
-          "type": "address"
-        }
-      ],
+      "inputs": [],
       "name": "balanceOf",
       "outputs": [
         {
@@ -436,7 +444,7 @@
       "payable": false,
       "stateMutability": "view",
       "type": "function",
-      "signature": "0x70a08231"
+      "signature": "0x722713f7"
     },
     {
       "constant": true,
@@ -471,30 +479,6 @@
       "stateMutability": "nonpayable",
       "type": "function",
       "signature": "0x79c65068"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_from",
-          "type": "address"
-        },
-        {
-          "name": "_value",
-          "type": "uint256"
-        }
-      ],
-      "name": "burnFrom",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x79cc6790"
     },
     {
       "constant": true,
@@ -566,7 +550,7 @@
           "type": "address"
         }
       ],
-      "name": "ifAccountFrozen",
+      "name": "ifAccountFrozenOnlyOwner",
       "outputs": [
         {
           "name": "",
@@ -576,22 +560,7 @@
       "payable": false,
       "stateMutability": "view",
       "type": "function",
-      "signature": "0x7fed80bb"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "pause",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x8456cb59"
+      "signature": "0x83578925"
     },
     {
       "constant": true,
@@ -624,6 +593,55 @@
       "signature": "0x8da5cb5b"
     },
     {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newfeeProportion",
+          "type": "uint256"
+        },
+        {
+          "name": "newcommissionProportion",
+          "type": "uint256"
+        }
+      ],
+      "name": "setProportion",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x91bbf434"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "Lastbuytime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x92fb7174"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "unpauseTransaction",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x93faa450"
+    },
+    {
       "constant": true,
       "inputs": [],
       "name": "symbol",
@@ -637,6 +655,21 @@
       "stateMutability": "view",
       "type": "function",
       "signature": "0x95d89b41"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "ifAccountFrozen",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x98611fa9"
     },
     {
       "constant": false,
@@ -706,6 +739,74 @@
       "signature": "0xb414d4b6"
     },
     {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "_allowed",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xba0fb861"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "Sellercredit",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xc2d6a0b3"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "who",
+          "type": "address"
+        },
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "SellercreditOnlyOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xcea601e6"
+    },
+    {
       "constant": false,
       "inputs": [],
       "name": "transferHeyue",
@@ -719,15 +820,11 @@
       "constant": true,
       "inputs": [
         {
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "name": "spender",
-          "type": "address"
+          "name": "i",
+          "type": "uint256"
         }
       ],
-      "name": "allowance",
+      "name": "contributionvalue",
       "outputs": [
         {
           "name": "",
@@ -737,7 +834,37 @@
       "payable": false,
       "stateMutability": "view",
       "type": "function",
-      "signature": "0xdd62ed3e"
+      "signature": "0xd59f70be"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tSymbol",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xd6aea001"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tName",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xdbd41799"
     },
     {
       "constant": false,
@@ -757,33 +884,6 @@
       "stateMutability": "nonpayable",
       "type": "function",
       "signature": "0xe724529c"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_from",
-          "type": "address"
-        },
-        {
-          "name": "_to",
-          "type": "address[]"
-        },
-        {
-          "name": "value",
-          "type": "uint256"
-        },
-        {
-          "name": "buyergrade",
-          "type": "uint8"
-        }
-      ],
-      "name": "afterRealTimeTransaction",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0xe764c6e1"
     },
     {
       "constant": false,
@@ -826,6 +926,61 @@
       "signature": "0xf400fde4"
     },
     {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "addressNumber",
+          "type": "uint256"
+        },
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address[]"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "buyergrade",
+          "type": "uint8"
+        }
+      ],
+      "name": "afterRealTimeTransaction",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xf569c684"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "who",
+          "type": "address"
+        },
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "TotalbuyerpaymenORsellercollectionOnlyOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xfdb38bcd"
+    },
+    {
       "payable": true,
       "stateMutability": "payable",
       "type": "fallback"
@@ -858,6 +1013,16 @@
       "inputs": [
         {
           "indexed": false,
+          "name": "buyerId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "nonce",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
           "name": "publicKeyCheck",
           "type": "string"
         },
@@ -865,11 +1030,16 @@
           "indexed": false,
           "name": "ipOrEigenvalues",
           "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "duration",
+          "type": "uint64"
         }
       ],
       "name": "addRealTimeTx",
       "type": "event",
-      "signature": "0xbda6b93561aad1ca0c8cf12fa0283601a1743b8ae2133e0923ba6f02a7c248b9"
+      "signature": "0x1c3abb4c6332f91f979052da44050a2c3e4568cdcaaf571ecd75db8ed07767d1"
     },
     {
       "anonymous": false,
@@ -919,24 +1089,6 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
-          "name": "target",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "frozen",
-          "type": "bool"
-        }
-      ],
-      "name": "FrozenFunds",
-      "type": "event",
-      "signature": "0x48335238b4855f35377ed80f164e8c6f3c366e54ac00b96a6402d4a9814a03a5"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
           "indexed": true,
           "name": "from",
           "type": "address"
@@ -960,19 +1112,19 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "name": "from",
+          "indexed": false,
+          "name": "target",
           "type": "address"
         },
         {
           "indexed": false,
-          "name": "value",
-          "type": "uint256"
+          "name": "frozen",
+          "type": "bool"
         }
       ],
-      "name": "Burn",
+      "name": "FrozenFunds",
       "type": "event",
-      "signature": "0xcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5"
+      "signature": "0x48335238b4855f35377ed80f164e8c6f3c366e54ac00b96a6402d4a9814a03a5"
     },
     {
       "anonymous": false,
@@ -989,43 +1141,11 @@
       "signature": "0x7805862f689e2f13df9f062ff482ad3ad112aca9e0847911ed832e158c525b33"
     },
     {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "buyer",
-          "type": "address"
-        },
-        {
-          "name": "i",
-          "type": "uint256"
-        }
-      ],
-      "name": "checkDataTxOwner",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x0fbee98b"
-    },
-    {
       "constant": false,
       "inputs": [
         {
           "name": "_seller",
           "type": "address"
-        },
-        {
-          "name": "_fileNumberList",
-          "type": "uint256[]"
-        },
-        {
-          "name": "_publicKeyCheck",
-          "type": "string"
         },
         {
           "name": "_txType",
@@ -1050,7 +1170,7 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function",
-      "signature": "0x8c904400"
+      "signature": "0xb60d3b1d"
     },
     {
       "constant": false,
@@ -1086,29 +1206,69 @@
       "constant": true,
       "inputs": [
         {
-          "name": "buyer",
-          "type": "address"
-        },
-        {
           "name": "i",
           "type": "uint256"
         }
       ],
-      "name": "checkRealTimeTxOwner",
+      "name": "InquireUnconfirm",
       "outputs": [
         {
           "name": "",
-          "type": "bool"
+          "type": "uint256[]"
         }
       ],
       "payable": false,
       "stateMutability": "view",
       "type": "function",
-      "signature": "0xf73b152d"
+      "signature": "0xa4c18c2c"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "InquireTx",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "uint8"
+        },
+        {
+          "name": "",
+          "type": "bool"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xc6da3086"
     },
     {
       "constant": false,
       "inputs": [
+        {
+          "name": "_nonce",
+          "type": "uint256"
+        },
         {
           "name": "_publicKeyCheck",
           "type": "string"
@@ -1128,6 +1288,14 @@
         {
           "name": "_buyerGrade",
           "type": "uint8"
+        },
+        {
+          "name": "_duration",
+          "type": "uint64"
+        },
+        {
+          "name": "_buyerId",
+          "type": "uint256"
         }
       ],
       "name": "buyRealTimeData",
@@ -1140,7 +1308,7 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function",
-      "signature": "0x6d0c7c4b"
+      "signature": "0xd19d49f9"
     },
     {
       "constant": false,
@@ -1186,5 +1354,91 @@
       "stateMutability": "nonpayable",
       "type": "function",
       "signature": "0xfcbd7ae2"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "InquireUnconfirmReal",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x4363600a"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "i",
+          "type": "uint256"
+        }
+      ],
+      "name": "InquireRealDataTx",
+      "outputs": [
+        {
+          "components": [
+            {
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "name": "ipOrEigenvalues",
+              "type": "string"
+            },
+            {
+              "name": "publicKeyCheck",
+              "type": "string"
+            },
+            {
+              "name": "txStatus",
+              "type": "bool"
+            },
+            {
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "name": "accountsNumber",
+              "type": "uint32"
+            },
+            {
+              "name": "buyerGrade",
+              "type": "uint8"
+            },
+            {
+              "name": "duration",
+              "type": "uint64"
+            },
+            {
+              "name": "buyerId",
+              "type": "uint256"
+            },
+            {
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "name": "",
+          "type": "tuple"
+        },
+        {
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x0426f7e2"
     }
   ]

@@ -3,11 +3,11 @@
 # from web3.contract import ConciseContract
 # # import TerminalControl
 #
-# file = open("./config/contract.json", "r")
+# file = open("./config/tx_contract_abi.json", "r")
 # contract_abi = json.load(file)
 # file.close()
 #
-# file = open("./config/contract_addr.json", "r")
+# file = open("./config/tx_contract_addr.json", "r")
 # contract_addr = json.load(file)
 # file.close()
 #
